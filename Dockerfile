@@ -22,16 +22,7 @@ RUN yum install -y --enablerepo=rpmforge,epel,remi,remi-php54 \
     mysql \
     mysql-devel \
     php-mysqlnd \
-    python-setuptools \
-    sudo \
-    passwd
-
-#
-# Create supervisord
-#
-RUN easy_install supervisor
-RUN mkdir -p /var/log/supervisor
-ADD ./supervisord.conf /etc/supervisord.conf
+    python-setuptools
 
 #
 # Install WP-CLI
@@ -46,11 +37,11 @@ RUN echo "NETWORKING=yes" > /etc/sysconfig/network
 # Create a Database for WordPress
 # Install WordPress
 #
+WORKDIR /var/www/html
 RUN service mysqld start && \
     mysqladmin -u root password root && \
     mysql -uroot -proot -e \
       "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8; grant all privileges on wordpress.* to wordpress@localhost identified by 'wordpress';" && \
-    cd /var/www/html && \
     wp core download --locale=ja && \
     wp core config \
       --dbname=wordpress \
@@ -62,9 +53,18 @@ RUN service mysqld start && \
       --admin_name=admin \
       --admin_password=admin \
       --admin_email=admin@example.com \
-      --url=http://docker.local \
-      --title=WordPress
+      --url=http://vcdw.local \
+      --title=WordPress && \
+    wp plugin install --activate \
+      wp-multibyte-patch \
+      theme-check \
+      plugin-check && \
+    wp plugin update --all
+WORKDIR /
 
+#
+# Create a mount point
+#
 VOLUME ["/share"]
 
 #
@@ -72,4 +72,28 @@ VOLUME ["/share"]
 #
 EXPOSE 22 80
 
+#
+# Create supervisord
+#
+RUN easy_install supervisor
+RUN mkdir -p /var/log/supervisor
+ADD ./supervisord.conf /etc/supervisord.conf
+
 CMD ["/usr/bin/supervisord"]
+
+#
+# Optional packages
+#
+# RUN yum install -y --enablerepo=rpmforge,epel,remi,remi-php54 \
+#     bash-completion \
+#     wget \
+#     tar \
+#     sudo \
+#     passwd \
+#     php-opcache \
+#     php-devel \
+#     php-mcrypt \
+#     php-phpunit-PHPUnit \
+#     php-pecl-xdebug \
+#     php-gd \
+#     gd
