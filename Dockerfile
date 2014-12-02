@@ -34,21 +34,29 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 RUN echo "NETWORKING=yes" > /etc/sysconfig/network
 
 #
+# Make a WordPress folder
+# Change Apache DocumentRoot to WordPress folder
 # Create a Database for WordPress
 # Install WordPress
 #
-WORKDIR /var/www/html
+RUN mkdir /var/www/wordpress
+RUN sed -i 's/^DocumentRoot "\/var\/www\/html"$/DocumentRoot "\/var\/www\/wordpress"/' /etc/httpd/conf/httpd.conf
+RUN chown -R apache:apache /var/www/wordpress
+WORKDIR /var/www/wordpress
 RUN service mysqld start && \
     mysqladmin -u root password root && \
     mysql -uroot -proot -e \
       "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8; grant all privileges on wordpress.* to wordpress@localhost identified by 'wordpress';" && \
-    wp core download --locale=ja && \
+    wp core download \
+      --locale=ja \
+      && \
     wp core config \
       --dbname=wordpress \
       --dbuser=wordpress \
       --dbpass=wordpress \
       --dbhost=localhost \
-      --locale=ja && \
+      --locale=ja \
+      && \
     wp core install \
       --admin_name=admin \
       --admin_password=admin \
@@ -65,7 +73,7 @@ WORKDIR /
 #
 # Create a mount point
 #
-VOLUME ["/share"]
+VOLUME ["/var/www/wordpress"]
 
 #
 # Open ports
