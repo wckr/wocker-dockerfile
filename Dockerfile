@@ -41,6 +41,7 @@ RUN echo "NETWORKING=yes" > /etc/sysconfig/network
 #
 RUN mkdir /var/www/wordpress
 RUN sed -i 's/^DocumentRoot "\/var\/www\/html"$/DocumentRoot "\/var\/www\/wordpress"/' /etc/httpd/conf/httpd.conf
+ADD wp-config-extra /wp-config-extra
 WORKDIR /var/www/wordpress
 RUN service mysqld start && \
     mysqladmin -u root password root && \
@@ -55,6 +56,7 @@ RUN service mysqld start && \
       --dbpass=wordpress \
       --dbhost=localhost \
       # --locale=ja \
+      --extra-php < /wp-config-extra \
       && \
     wp core install \
       --admin_name=admin \
@@ -63,13 +65,14 @@ RUN service mysqld start && \
       --url=http://vcdw.local \
       --title=WordPress \
       && \
-    wp plugin install --activate \
-      # wp-multibyte-patch \
-      theme-check \
-      plugin-check \
-      && \
-    wp plugin update --all
+    # wp plugin install --activate \
+    #   wp-multibyte-patch \
+    #   theme-check \
+    #   plugin-check \
+    #   && \
+    wp theme update --all && wp plugin update --all
 RUN chown -R apache:apache /var/www/wordpress
+RUN rm -f /wp-config-extra
 WORKDIR /
 
 #
