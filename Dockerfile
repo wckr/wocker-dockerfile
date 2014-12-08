@@ -1,15 +1,15 @@
 FROM centos:centos6
 MAINTAINER ixkaito <ixkaito@gmail.com>
 
-RUN yum -y update
+RUN yum -y update; yum clean all
 
 #
 # Repositories
 #
-RUN yum -y install epel-release rpmforge-release
+RUN yum -y install epel-release rpmforge-release; yum clean all
 RUN rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 
-RUN yum -y update --enablerepo=rpmforge,epel,remi,remi-php54
+RUN yum -y update --enablerepo=rpmforge,epel,remi,remi-php54; yum clean all
 
 #
 # Install YUM packages
@@ -22,7 +22,8 @@ RUN yum install -y --enablerepo=rpmforge,epel,remi,remi-php54 \
     mysql \
     mysql-devel \
     php-mysqlnd \
-    python-setuptools
+    python-setuptools \
+    ; yum clean all
 
 #
 # Install WP-CLI
