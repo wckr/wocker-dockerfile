@@ -77,11 +77,6 @@ RUN rm -f /wp-config-extra
 WORKDIR /
 
 #
-# Create a mount point
-#
-VOLUME ["/var/www/wordpress"]
-
-#
 # Open ports
 #
 EXPOSE 22 80
