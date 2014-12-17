@@ -15,16 +15,16 @@ RUN yum -y update --enablerepo=rpmforge,epel,remi,remi-php54; yum clean all
 # Install YUM packages
 #
 RUN yum install -y --enablerepo=rpmforge,epel,remi,remi-php54 \
-    httpd \
-    php \
-    php-mbstring \
-    mysql-server \
-    mysql \
-    mysql-devel \
-    php-mysqlnd \
-    php-xml \
-    python-setuptools \
-    ; yum clean all
+      httpd \
+      php \
+      php-mbstring \
+      mysql-server \
+      mysql \
+      mysql-devel \
+      php-mysqlnd \
+      php-xml \
+      python-setuptools \
+      ; yum clean all
 
 #
 # Install WP-CLI
@@ -45,34 +45,30 @@ RUN mkdir /var/www/wordpress
 RUN sed -i 's/^DocumentRoot "\/var\/www\/html"$/DocumentRoot "\/var\/www\/wordpress"/' /etc/httpd/conf/httpd.conf
 ADD wp-config-extra /wp-config-extra
 WORKDIR /var/www/wordpress
-RUN service mysqld start && \
-    mysqladmin -u root password root && \
-    mysql -uroot -proot -e \
-      "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8; grant all privileges on wordpress.* to wordpress@localhost identified by 'wordpress';" && \
-    wp core download \
+RUN service mysqld start \
+    && mysqladmin -u root password root \
+    && mysql -uroot -proot -e \
+      "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8; grant all privileges on wordpress.* to wordpress@localhost identified by 'wordpress';" \
+    && wp core download \
       # --locale=ja \
-      && \
-    wp core config \
+    && wp core config \
       --dbname=wordpress \
       --dbuser=wordpress \
       --dbpass=wordpress \
       --dbhost=localhost \
       # --locale=ja \
       --extra-php < /wp-config-extra \
-      && \
-    wp core install \
+    && wp core install \
       --admin_name=admin \
       --admin_password=admin \
       --admin_email=admin@example.com \
       --url=http://vcdw.local \
       --title=WordPress \
-      && \
-    # wp plugin install --activate \
+    # && wp plugin install --activate \
     #   wp-multibyte-patch \
     #   theme-check \
     #   plugin-check \
-    #   && \
-    wp theme update --all && wp plugin update --all
+    && wp theme update --all && wp plugin update --all
 RUN chown -R apache:apache /var/www/wordpress
 RUN rm -f /wp-config-extra
 WORKDIR /
