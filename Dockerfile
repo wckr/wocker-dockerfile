@@ -22,6 +22,7 @@ RUN yum install -y --enablerepo=rpmforge,epel,remi,remi-php54 \
     mysql \
     mysql-devel \
     php-mysqlnd \
+    php-xml \
     python-setuptools \
     ; yum clean all
 
