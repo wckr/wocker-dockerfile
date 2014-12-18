@@ -29,22 +29,26 @@ RUN yum install -y --enablerepo=rpmforge,epel,remi,remi-php54 \
 #
 # Install WP-CLI
 #
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-RUN chmod +x wp-cli.phar
-RUN mv wp-cli.phar /usr/local/bin/wp
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp
 
 RUN echo "NETWORKING=yes" > /etc/sysconfig/network
 
 #
-# Make a WordPress folder
-# Change Apache DocumentRoot to WordPress folder
+# Make a WordPress directory
+# Change Apache DocumentRoot to WordPress directory
 # Create a Database for WordPress
 # Install WordPress
 #
-RUN mkdir /var/www/wordpress
 RUN sed -i 's/^DocumentRoot "\/var\/www\/html"$/DocumentRoot "\/var\/www\/wordpress"/' /etc/httpd/conf/httpd.conf
-ADD wp-config-extra /wp-config-extra
+ADD httpd-extra.conf /httpd-extra.conf
+RUN cat /httpd-extra.conf >> /etc/httpd/conf/httpd.conf \
+    && rm -f /httpd-extra.conf
+
+RUN mkdir /var/www/wordpress
 WORKDIR /var/www/wordpress
+ADD wp-config-extra /wp-config-extra
 RUN service mysqld start \
     && mysqladmin -u root password root \
     && mysql -uroot -proot -e \
@@ -68,9 +72,10 @@ RUN service mysqld start \
     #   wp-multibyte-patch \
     #   theme-check \
     #   plugin-check \
-    && wp theme update --all && wp plugin update --all
+    && wp theme update --all \
+    && wp plugin update --all \
+    && rm -f /wp-config-extra
 RUN chown -R apache:apache /var/www/wordpress
-RUN rm -f /wp-config-extra
 WORKDIR /
 
 #
