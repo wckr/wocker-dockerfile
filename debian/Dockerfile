@@ -1,13 +1,12 @@
-FROM debian:jessie
+FROM debian:wheezy
 MAINTAINER ixkaito <ixkaito@gmail.com>
 
 RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get clean \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      apache2-bin \
-      apache2.2-common \
-      php5-common \
+      apache2 \
+      php5 \
       libapache2-mod-php5 \
       php5-cli \
       php5-mysql \
@@ -22,8 +21,8 @@ RUN apt-get update \
 #
 # Apache Settings
 #
-RUN mv /etc/apache2/apache2.conf /etc/apache2/apache2.conf.dist
-ADD apache2.conf /etc/apache2/apache2.conf
+RUN mv /etc/apache2/sites-available/default /etc/apache2/sites-available/default.dist
+ADD apache2-default /etc/apache2/sites-available/default
 RUN a2enmod rewrite
 
 #
