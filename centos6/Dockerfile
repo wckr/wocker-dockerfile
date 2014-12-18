@@ -76,12 +76,11 @@ RUN service mysqld start \
     && wp plugin update --all \
     && rm -f /wp-config-extra
 RUN chown -R apache:apache /var/www/wordpress
-WORKDIR /
 
 #
 # Open ports
 #
-EXPOSE 22 80
+EXPOSE 80
 
 #
 # Create supervisord
