@@ -59,6 +59,25 @@ RUN service mysql start \
       --title=WordPress \
     && wp plugin install --allow-root --activate \
       wp-multibyte-patch \
+      debug-bar \
+      debug-bar-console \
+      debug-bar-cron \
+      debug-bar-extender \
+      developer \
+      log-deprecated-notices \
+      log-viewer \
+      monster-widget \
+      piglatin \
+      plugin-check \
+      rewrite-rules-inspector \
+      rtl-tester \
+      simply-show-ids \
+      theme-check \
+      theme-test-drive \
+      user-switching \
+      wordpress-beta-tester \
+      wordpress-database-reset \
+      wordpress-importer \
     && wp theme update --allow-root --all \
     && wp plugin update --allow-root --all \
     && rm -rf /wp-config-extra
