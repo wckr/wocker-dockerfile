@@ -44,13 +44,11 @@ RUN service mysql start \
     && mysql -uroot -proot -e \
       "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8; grant all privileges on wordpress.* to wordpress@localhost identified by 'wordpress';" \
     && wp core download --allow-root \
-      # --locale=ja \
     && wp core config --allow-root \
       --dbname=wordpress \
       --dbuser=wordpress \
       --dbpass=wordpress \
       --dbhost=localhost \
-      # --locale=ja \
       --extra-php < /wp-config-extra \
     && wp core install --allow-root \
       --admin_name=admin \
@@ -58,10 +56,6 @@ RUN service mysql start \
       --admin_email=admin@example.com \
       --url=http://vcdw.local \
       --title=WordPress \
-    # && wp plugin install --allow-root --activate \
-    #   wp-multibyte-patch \
-    #   theme-check \
-    #   plugin-check \
     && wp theme update --allow-root --all \
     && wp plugin update --allow-root --all \
     && rm -rf /wp-config-extra
