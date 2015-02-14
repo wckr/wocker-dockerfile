@@ -53,7 +53,7 @@ RUN service mysql start \
       --admin_name=admin \
       --admin_password=admin \
       --admin_email=admin@example.com \
-      --url=http://vcdw.local \
+      --url=http://wocker.dev \
       --title=WordPress \
     && wp theme update --allow-root --all \
     && wp plugin update --allow-root --all \

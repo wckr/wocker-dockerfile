@@ -1,3 +1,3 @@
-# VCDW (Vagrant, CoreOS, Docker, and WordPress) Dockerfile
+# Dockerfile of Wocker
 
-Dockerfiles of [ixkaito/vcdw](https://registry.hub.docker.com/u/ixkaito/vcdw/) for [VCDW](https://github.com/ixkaito/vcdw).
+Dockerfiles of [ixkaito/wocker](https://registry.hub.docker.com/u/ixkaito/wocker/) for [Wocker](https://github.com/ixkaito/wocker).
