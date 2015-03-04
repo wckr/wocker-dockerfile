@@ -1,3 +1,3 @@
 # Dockerfile of Wocker
 
-Dockerfiles of [ixkaito/wocker](https://registry.hub.docker.com/u/ixkaito/wocker/) for [Wocker](https://github.com/ixkaito/wocker).
+Dockerfiles of the Docker image [ixkaito/wocker](https://registry.hub.docker.com/u/ixkaito/wocker/) for [Wocker](http://ixkaito.github.io/wocker/).
