@@ -17,6 +17,7 @@ RUN yum -y update --enablerepo=rpmforge,epel,remi,remi-php54; yum clean all
 RUN yum install -y --enablerepo=rpmforge,epel,remi,remi-php54 \
       httpd \
       php \
+      php-gd \
       php-mbstring \
       mysql-server \
       mysql \
@@ -99,5 +100,4 @@ CMD ["/usr/bin/supervisord"]
 #     php-mcrypt \
 #     php-phpunit-PHPUnit \
 #     php-pecl-xdebug \
-#     php-gd \
 #     gd
