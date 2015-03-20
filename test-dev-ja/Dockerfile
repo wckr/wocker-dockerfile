@@ -9,7 +9,7 @@ RUN apt-get update \
       php5 \
       libapache2-mod-php5 \
       php5-cli \
-      php-gd \
+      php5-gd \
       php5-mysql \
       mysql-server \
       mysql-client \
