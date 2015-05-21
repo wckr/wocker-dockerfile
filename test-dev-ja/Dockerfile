@@ -39,10 +39,11 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 RUN mkdir /var/www/wordpress
 ADD wp-config-extra /wp-config-extra
 WORKDIR /var/www/wordpress
-RUN service mysql start \
+RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
+    && service mysql start \
     && mysqladmin -u root password root \
     && mysql -uroot -proot -e \
-      "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8; grant all privileges on wordpress.* to wordpress@localhost identified by 'wordpress';" \
+      "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8; grant all privileges on wordpress.* to wordpress@'%' identified by 'wordpress';" \
     && wp core download --allow-root \
       # --locale=ja \
     && wp core config --allow-root \
@@ -87,7 +88,7 @@ RUN chown -R www-data:www-data /var/www/wordpress
 #
 # Open ports
 #
-EXPOSE 80
+EXPOSE 80 3306
 
 #
 # Supervisor
