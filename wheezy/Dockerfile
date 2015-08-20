@@ -27,6 +27,14 @@ ADD apache2-default /etc/apache2/sites-available/default
 RUN a2enmod rewrite
 
 #
+# php.ini settings
+#
+RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php5/apache2/php.ini \
+    && sed -i -e "s/^post_max_size.*/post_max_size = 64M/" /etc/php5/apache2/php.ini \
+    && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php5/apache2/php.ini \
+    && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php5/apache2/php.ini
+
+#
 # Install WP-CLI
 #
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
