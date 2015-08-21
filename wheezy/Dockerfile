@@ -11,6 +11,7 @@ RUN apt-get update \
       php5-cli \
       php5-gd \
       php5-mysql \
+      php5-curl \
       mysql-server \
       mysql-client \
       curl \
