@@ -39,8 +39,8 @@ RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php5/ap
 # Install WP-CLI
 #
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli-nightly.phar \
-    && chmod +x wp-cli.phar \
-    && mv wp-cli.phar /usr/local/bin/wp
+    && chmod +x wp-cli-nightly.phar \
+    && mv wp-cli-nightly.phar /usr/local/bin/wp
 
 #
 # Install WordPress
