@@ -1,4 +1,4 @@
-FROM debian:wheezy
+FROM debian:jessie
 MAINTAINER ixkaito <ixkaito@gmail.com>
 
 RUN apt-get update \
@@ -6,8 +6,8 @@ RUN apt-get update \
     && apt-get clean \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       apache2 \
-      php5 \
       libapache2-mod-php5 \
+      php5 \
       php5-cli \
       php5-gd \
       php5-mysql \
@@ -23,9 +23,10 @@ RUN apt-get update \
 #
 # Apache Settings
 #
-RUN mv /etc/apache2/sites-available/default /etc/apache2/sites-available/default.dist
-ADD apache2-default /etc/apache2/sites-available/default
-RUN a2enmod rewrite
+RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
+    && sed -i -e "s#DocumentRoot.*#DocumentRoot /var/www/wordpress#" /etc/apache2/sites-available/000-default.conf \
+    && sed -i -e "s/export APACHE_RUN_USER=.*/export APACHE_RUN_USER=wocker/" /etc/apache2/envvars \
+    && sed -i -e "s/export APACHE_RUN_GROUP=.*/export APACHE_RUN_GROUP=wocker/" /etc/apache2/envvars
 
 #
 # php.ini settings
@@ -43,7 +44,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     && mv wp-cli-nightly.phar /usr/local/bin/wp
 
 #
-# Install WordPress
+# MySQL settings & Install WordPress
 #
 RUN mkdir /var/www/wordpress
 ADD wp-config-extra /wp-config-extra
@@ -69,7 +70,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     && wp theme update --allow-root --all \
     && wp plugin update --allow-root --all \
     && rm -rf /wp-config-extra
-RUN chown -R www-data:www-data /var/www/wordpress
+RUN chown -R wocker:wocker /var/www/wordpress
 
 #
 # Open ports
