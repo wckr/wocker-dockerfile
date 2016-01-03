@@ -18,6 +18,7 @@ RUN apt-get update \
       supervisor \
       ca-certificates \
       vim \
+      less \
     && rm -rf /var/lib/apt/lists/*
 
 #
