@@ -22,6 +22,12 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 #
+# `mysqld_safe` patch
+# @see https://github.com/wckr/wocker/pull/28#issuecomment-195945765
+#
+RUN sed -i -e 's/file) cmd="$cmd >> "`shell_quote_string "$err_log"`" 2>\&1" ;;/file) cmd="$cmd >> "`shell_quote_string "$err_log"`" 2>\&1 \& wait" ;;/' /usr/bin/mysqld_safe
+
+#
 # Apache Settings
 #
 RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
