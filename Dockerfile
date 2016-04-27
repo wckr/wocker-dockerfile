@@ -56,8 +56,8 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 #
 # MySQL settings & Install WordPress
 #
-RUN mkdir /var/www/wordpress
-ADD wp-config-extra /wp-config-extra
+RUN mkdir -p /var/www/wordpress
+ADD wp-cli.yml /var/www
 WORKDIR /var/www/wordpress
 RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     && service mysql start \
@@ -70,7 +70,6 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
       --dbuser=wordpress \
       --dbpass=wordpress \
       --dbhost=localhost \
-      --extra-php < /wp-config-extra \
     && wp core install --allow-root \
       --admin_name=admin \
       --admin_password=admin \
