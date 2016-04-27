@@ -77,8 +77,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
       --url=http://wocker.dev \
       --title=WordPress \
     && wp theme update --allow-root --all \
-    && wp plugin update --allow-root --all \
-    && rm -rf /wp-config-extra
+    && wp plugin update --allow-root --all
 RUN chown -R wocker:wocker /var/www/wordpress
 
 #
