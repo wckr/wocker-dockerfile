@@ -37,8 +37,8 @@ RUN apt-get update \
 #
 # Xdebug remote host setup
 #
-RUN echo "xdebug.remote_host=10.0.23.1" >> /etc/php5/apache/conf.d/20-xdebug.ini \
-    && echo "xdebug.remote_port=9000" >> /etc/php5/apache/conf.d/20-xdebug.ini
+RUN echo "xdebug.remote_host=10.0.23.1" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
+    && echo "xdebug.remote_port=9000" >> /etc/php5/apache2/conf.d/20-xdebug.ini
 
 #
 # Install MailCatcher
