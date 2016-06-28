@@ -101,7 +101,7 @@ RUN chown -R wocker:wocker /var/www/wordpress
 #
 # Open ports
 #
-EXPOSE 80 443 3306
+EXPOSE 80 443 3306 1080
 
 #
 # Supervisor
