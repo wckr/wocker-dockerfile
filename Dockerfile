@@ -38,6 +38,11 @@ RUN apt-get update \
 RUN gem install mailcatcher
 
 #
+# Setup MailCatcher Apache proxy-pass
+#
+#TODO
+
+#
 # `mysqld_safe` patch
 # @see https://github.com/wckr/wocker/pull/28#issuecomment-195945765
 #
