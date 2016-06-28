@@ -29,6 +29,8 @@ RUN apt-get update \
       phpmyadmin \
       git \
       sudo \
+      make \
+      g++ \
       
       && rm -rf /var/lib/apt/lists/*
 
