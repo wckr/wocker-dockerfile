@@ -35,6 +35,11 @@ RUN apt-get update \
       && rm -rf /var/lib/apt/lists/*
 
 #
+# Xdebug remote host setup
+#
+RUN echo "xdebug.remote_host=10.0.23.1" >> /etc/php5/apache/conf.d/20-xdebug.ini
+
+#
 # Install MailCatcher
 #
 RUN gem install mailcatcher
