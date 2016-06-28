@@ -28,6 +28,7 @@ RUN apt-get update \
       ruby-dev \
       phpmyadmin \
       git \
+      sudo \
       
       && rm -rf /var/lib/apt/lists/*
 
