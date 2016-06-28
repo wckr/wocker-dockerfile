@@ -85,7 +85,7 @@ RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 256M/" /etc/php5/a
     && sed -i -e "s/^post_max_size.*/post_max_size = 267M/" /etc/php5/apache2/php.ini \
     && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php5/apache2/php.ini \
     && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php5/apache2/php.ini \
-    && sed -i -e "s/^;sendmail_path =*/sendmail_path = /usr/bin/env catchmail/" /etc/php5/apache2/php.ini
+    && sed -i -e "s/^;sendmail_path.*/sendmail_path = /usr/bin/env catchmail/" /etc/php5/apache2/php.ini
 
 #
 # Install WP-CLI
