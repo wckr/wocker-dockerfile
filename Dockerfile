@@ -43,6 +43,12 @@ RUN gem install mailcatcher
 #TODO
 
 #
+# Run MailCatcher on startup via rc.local
+#
+RUN sed -i -e "$i mailcatcher &\n" /etc/rc.local \
+    && chmod +x /etc/rc.local
+
+#
 # `mysqld_safe` patch
 # @see https://github.com/wckr/wocker/pull/28#issuecomment-195945765
 #
