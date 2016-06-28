@@ -12,6 +12,8 @@ RUN apt-get update \
       php5-gd \
       php5-mysql \
       php5-curl \
+      php5-dev \
+      php5-xdebug \
       mysql-server \
       mysql-client \
       curl \
@@ -19,7 +21,20 @@ RUN apt-get update \
       ca-certificates \
       vim \
       less \
-    && rm -rf /var/lib/apt/lists/*
+      php5-dev \
+      libsqlite3-dev \
+      sqlite3 \
+      ruby \
+      ruby-dev \
+      phpmyadmin \
+      git \
+      
+      && rm -rf /var/lib/apt/lists/*
+
+#
+# Install MailCatcher
+#
+RUN gem install mailcatcher
 
 #
 # `mysqld_safe` patch
@@ -36,13 +51,13 @@ RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
     && sed -i -e "s#DocumentRoot.*#DocumentRoot /var/www/wordpress#" /etc/apache2/sites-available/000-default.conf \
     && sed -i -e "s/export APACHE_RUN_USER=.*/export APACHE_RUN_USER=wocker/" /etc/apache2/envvars \
     && sed -i -e "s/export APACHE_RUN_GROUP=.*/export APACHE_RUN_GROUP=wocker/" /etc/apache2/envvars \
-    && a2enmod rewrite
+    && a2enmod rewrite && a2enmod vhost_alias && a2enmod ssl
 
 #
 # php.ini settings
 #
-RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php5/apache2/php.ini \
-    && sed -i -e "s/^post_max_size.*/post_max_size = 64M/" /etc/php5/apache2/php.ini \
+RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 256M/" /etc/php5/apache2/php.ini \
+    && sed -i -e "s/^post_max_size.*/post_max_size = 267M/" /etc/php5/apache2/php.ini \
     && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php5/apache2/php.ini \
     && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php5/apache2/php.ini
 
@@ -83,7 +98,7 @@ RUN chown -R wocker:wocker /var/www/wordpress
 #
 # Open ports
 #
-EXPOSE 80 3306
+EXPOSE 80 443 3306
 
 #
 # Supervisor
