@@ -1,5 +1,5 @@
 FROM debian:jessie
-MAINTAINER ixkaito <ixkaito@gmail.com>
+MAINTAINER not important
 
 RUN apt-get update \
     && apt-get upgrade -y \
