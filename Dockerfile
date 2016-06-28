@@ -54,7 +54,10 @@ RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
     && sed -i -e "s/export APACHE_RUN_GROUP=.*/export APACHE_RUN_GROUP=wocker/" /etc/apache2/envvars \
     && a2enmod rewrite \
     && a2enmod vhost_alias \
-    && a2enmod ssl
+    && a2enmod ssl \
+    && a2enmod proxy \
+    && a2enmod proxy_http
+    
 
 #
 # php.ini settings
