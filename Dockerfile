@@ -51,7 +51,9 @@ RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
     && sed -i -e "s#DocumentRoot.*#DocumentRoot /var/www/wordpress#" /etc/apache2/sites-available/000-default.conf \
     && sed -i -e "s/export APACHE_RUN_USER=.*/export APACHE_RUN_USER=wocker/" /etc/apache2/envvars \
     && sed -i -e "s/export APACHE_RUN_GROUP=.*/export APACHE_RUN_GROUP=wocker/" /etc/apache2/envvars \
-    && a2enmod rewrite && a2enmod vhost_alias && a2enmod ssl
+    && a2enmod rewrite \
+    && a2enmod vhost_alias \
+    && a2enmod ssl
 
 #
 # php.ini settings
