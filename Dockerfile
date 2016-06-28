@@ -115,7 +115,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
       --admin_name=admin \
       --admin_password=admin \
       --admin_email=admin@example.com \
-      --url=http://wocker.dev \
+      --url=http://debugger.com \
       --title=WordPress \
     && wp theme update --allow-root --all \
     && wp plugin update --allow-root --all
