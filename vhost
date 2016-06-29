@@ -1,0 +1,77 @@
+#!/bin/bash
+    export HOSTS_FILE='/etc/hosts'
+
+    export APACHE_VHOSTS_ROOT_DIR='/var/www/'
+    export APACHE_VHOSTS_CONF_DIR='/etc/apache2/sites-enabled/'
+
+    MSG_INSTALL_ABORTED="Installation aborted."
+
+    echo -e "=== Virtual Host & Server configuration \n"
+
+    # Is parameter 1 zero length?
+    if [ -z "$1" ]
+    then
+	echo -e "ERROR: Requires one attribute."
+	echo -e "=== ${MSG_INSTALL_ABORTED} ===================================================== \n"
+	exit 1
+    fi
+
+    # Does the new VHost directory already exists?
+    if [ -d "$APACHE_VHOSTS_ROOT_DIR$1" ] 
+    then 
+	echo -e '=== ERROR: Site directory already exists! Cannot create new VHost. \n'
+	echo -e "=== ${MSG_INSTALL_ABORTED} ===================================================== \n"
+	exit 1
+    fi
+
+    sudo mkdir $APACHE_VHOSTS_ROOT_DIR$1
+    sudo chown www-data $APACHE_VHOSTS_ROOT_DIR$1
+    sudo chmod 755 $APACHE_VHOSTS_ROOT_DIR$1
+
+    sudo sh -c "{ # Create the VHost file
+	echo '<VirtualHost *:80>'
+	echo '	DocumentRoot '$APACHE_VHOSTS_ROOT_DIR$1
+	echo '	CustomLog '$APACHE_VHOSTS_ROOT_DIR$1/access.log combined
+	echo '	ErrorLog '$APACHE_VHOSTS_ROOT_DIR$1/error.log
+	echo '	ServerName '$1
+	echo '	<Directory '$APACHE_VHOSTS_ROOT_DIR$1'>'
+	echo '		Options FollowSymLinks'
+	echo '		AllowOverride All'
+	echo '		Order deny,allow'
+	echo '		Allow from all'
+	echo '	</Directory>'
+	echo '</VirtualHost>'
+    } > $APACHE_VHOSTS_ROOT_DIR$1.conf"
+
+    sudo sh -c "{ # Create the VHost file
+	echo '<VirtualHost *:443>'
+	echo '	DocumentRoot '$APACHE_VHOSTS_ROOT_DIR$1
+	echo '	ServerName '$1
+	echo '	CustomLog '$APACHE_VHOSTS_ROOT_DIR$1/access.ssl.log combined
+	echo '	ErrorLog '$APACHE_VHOSTS_ROOT_DIR$1/error.ssl.log
+	echo '	<Directory '$APACHE_VHOSTS_ROOT_DIR$1'>'
+	echo '		Options FollowSymLinks'
+	echo '		AllowOverride All'
+	echo '		Order deny,allow'
+	echo '		Allow from all'
+	echo '	</Directory>'
+	echo 'SSLEngine on'
+	echo 'SSLCertificateFile '$APACHE_VHOSTS_ROOT_DIR$1/apache.crt
+	echo 'SSLCertificateKeyFile '$APACHE_VHOSTS_ROOT_DIR$1/apache.key
+	echo '</VirtualHost>'
+    } > $APACHE_VHOSTS_ROOT_DIR$1.ssl.conf"
+    sudo sh -c " openssl req -new -x509 -days 327670 -sha256 -newkey rsa:1024 -nodes -keyout apache.key -out apache.crt -subj /O=Company/OU=Department/CN='$1' "
+    sudo mv apache.key $APACHE_VHOSTS_ROOT_DIR$1
+    sudo mv apache.crt $APACHE_VHOSTS_ROOT_DIR$1
+    sudo mv $APACHE_VHOSTS_ROOT_DIR$1.conf $APACHE_VHOSTS_CONF_DIR
+    sudo mv $APACHE_VHOSTS_ROOT_DIR$1.ssl.conf $APACHE_VHOSTS_CONF_DIR
+
+    echo -e "=== VHost file created"
+
+    # Add the site to the local hosts file
+    sudo sh -c "echo '127.0.0.1	'$1 >> $HOSTS_FILE"
+
+    echo -e "=== hosts file updated"
+    echo -e "=== Restarting Apache server ... \n"
+    sudo apachectl graceful # ! Warning - this is OS X specific
+    echo -e "=== Virtual Host & Server configuration - Finished successfully \n"
