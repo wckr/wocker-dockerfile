@@ -32,7 +32,7 @@ echo -e "=== ${MSG_INSTALL_ABORTED} ============================================
 exit 1
 fi
 UP=$(pgrep mysql | wc -l);
-if [ "$UP" -ne 1 ];
+if [ "$UP" -ne 2 ];
 then
 echo -e "=== ERROR: MySQL not running!\n"
 echo -e "=== This script needs MySQL running in order to install and configure"
