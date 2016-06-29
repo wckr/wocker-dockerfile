@@ -86,6 +86,10 @@ RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 256M/" /etc/php5/a
     && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php5/apache2/php.ini \
     && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php5/apache2/php.ini \
     && sed -i -e "s/^;sendmail_path.*/sendmail_path = \/usr\/bin\/env catchmail/" /etc/php5/apache2/php.ini
+#
+# phpmyadmin copy config to sites-enabled
+#
+RUN cp /etc/phpmyadmin/apache.conf /etc/apache2/sites-enabled/
 
 #
 # Install WP-CLI
@@ -131,5 +135,7 @@ EXPOSE 80 443 3306 1080 9000
 #
 RUN mkdir -p /var/log/supervisor
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD vhost /bin/vhost
+ADD wp-install /bin/wp-install
 
 CMD ["/usr/bin/supervisord"]
