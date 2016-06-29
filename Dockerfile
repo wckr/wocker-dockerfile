@@ -48,12 +48,12 @@ RUN gem install mailcatcher
 #
 # Setup MailCatcher Apache proxy-pass
 #
-RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/ http:\/\/127.0.0.1:1080\/ \n' /etc/apache2/sites-enabled/000-default.conf
+#RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/ http:\/\/127.0.0.1:1080\/ \n' /etc/apache2/sites-enabled/000-default.conf
 
 #
 # Run MailCatcher on startup via rc.local
 #
-RUN sed -i -e '$i \/usr\/local\/bin\/mailcatcher \n' /etc/rc.local
+RUN sed -i -e '$i \/usr\/local\/bin\/mailcatcher --http-ip=19.0.23.16 \n' /etc/rc.local
 RUN chmod +x /etc/rc.local
 
 #
