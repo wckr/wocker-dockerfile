@@ -53,8 +53,8 @@ RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/ http:\/\/127.0.0.1:1080\/ \n' /e
 #
 # Run MailCatcher on startup via rc.local
 #
-RUN sed -i -e '$i mailcatcher &\n' /etc/rc.local \
-    && chmod +x /etc/rc.local
+RUN sed -i -e '$i mailcatcher \n' /etc/rc.local
+RUN chmod +x /etc/rc.local
 
 #
 # `mysqld_safe` patch
