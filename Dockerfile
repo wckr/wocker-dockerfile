@@ -31,14 +31,22 @@ RUN apt-get update \
       sudo \
       make \
       g++ \
+      php-pear \
       
       && rm -rf /var/lib/apt/lists/*
 
 #
 # Xdebug remote host setup
 #
-RUN echo "xdebug.remote_host=10.0.23.1" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
-    && echo "xdebug.remote_port=9000" >> /etc/php5/apache2/conf.d/20-xdebug.ini
+RUN echo "zend_extension="/usr/lib/php5/20131226/xdebug.so"" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
+    && echo "xdebug.remote_host=10.0.23.1" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
+    && echo "xdebug.remote_port = 9000" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
+    && echo "xdebug.remote_enable = 1" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
+    && echo "xdebug.remote_autostart = 0" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
+    && echo "xdebug.profiler_enable_trigger = 1" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
+    && echo "xdebug.remote_handler = dbgp" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
+    && echo "xdebug.profiler_enable=0" >> /etc/php5/apache2/conf.d/20-xdebug.ini
+    
 
 #
 # Install MailCatcher
