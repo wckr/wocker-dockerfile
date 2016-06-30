@@ -128,6 +128,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     && wp theme update --allow-root --all \
     && wp plugin update --allow-root --all
 RUN chown -R wocker:wocker /var/www/wordpress
+RUN chown -R wocker:wocker /var/www
 
 #
 # Open ports
