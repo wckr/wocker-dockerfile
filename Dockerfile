@@ -53,12 +53,6 @@ RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/assets\/mailcatcher.css http:\/\/
 RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/assets\/mailcatcher.css http:\/\/127.0.0.1:1080\/assets\/mailcatcher.js \n' /etc/apache2/sites-enabled/000-default.conf
 
 #
-# Run MailCatcher on startup via rc.local
-#
-RUN sed -i -e '$i \/usr\/local\/bin\/mailcatcher \n' /etc/rc.local
-RUN chmod +x /etc/rc.local
-
-#
 # `mysqld_safe` patch
 # @see https://github.com/wckr/wocker/pull/28#issuecomment-195945765
 #
