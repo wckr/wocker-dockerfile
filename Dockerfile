@@ -144,7 +144,7 @@ ADD wp-install /usr/local/bin/wp-install
 RUN chmod +x /usr/local/bin/vhost
 RUN chmod +x /usr/local/bin/wp-install
 
-RUN curl -sS https://getcomposer.org/installer | php && \
+RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && chmod +x /usr/local/bin/composer
 
