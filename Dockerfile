@@ -131,9 +131,9 @@ EXPOSE 80 443 3306 1080 9000
 #
 RUN mkdir -p /var/log/supervisor
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-ADD vhost /bin/vhost
-ADD wp-install /bin/wp-install
-RUN chmod +x /bin/vhost
-RUN chmod +x /bin/wp-install
+ADD vhost /usr/local/bin/vhost
+ADD wp-install /usr/local/bin/wp-install
+RUN chmod +x /usr/local/bin/vhost
+RUN chmod +x /usr/local/bin/wp-install
 
 CMD ["/usr/bin/supervisord"]
