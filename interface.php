@@ -57,6 +57,7 @@ shell_exec($sed2);
 shell_exec('cp -f /etc/hosts3 /etc/hosts');
 shell_exec('rm -rf /etc/apache2/sites-enabled/'.$_POST["delete"].'.*');
 shell_exec('rm -rf /var/www/'.$_POST["delete"]);
+shell_exec('sudo service apache2 force-reload');
 }
 }
 function button() {
