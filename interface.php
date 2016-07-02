@@ -32,32 +32,32 @@ Create Vhost+WordPress Install: <input type="text" name="install">
 </body>
 </html>
 <?php
-function create($host) {
+function create() {
 if ($_POST["name"] != '') {
 $_POST["name"];
 $create = ('vhost '. $_POST["name"]);
 shell_exec($create);
 }
 }
-function install($host) {
+function install() {
 if ($_POST["install"] != '') {
 $_POST["install"];
 $install = ('wp-install '. $_POST["install"]);
 shell_exec($install);
 }
 }
-function delete($host) {
+function delete() {
 if ($_POST["delete"] != '') {
 $_POST["delete"];
-$sed = 'sudo sed -i -e \''.'s/127.0.0.1\t'.$_POST["delete"].'//g\''.' /etc/hosts'; 
-$sed2 = 'sudo sed -i -e \''.'/^$/d\''. ' /etc/hosts';
+$sed = 'sed -i -e \''.'s/127.0.0.1\t'.$_POST["delete"].'//g\''.' /etc/hosts'; 
+$sed2 = 'sed -i -e \''.'/^$/d\''. ' /etc/hosts';
 shell_exec($sed);
 shell_exec($sed2);
-shell_exec('sudo rm -rf /etc/apache2/sites-enabled/'.$_POST["delete"].'.*');
-shell_exec('sudo rm -rf /var/www/'.$_POST["delete"]);
+shell_exec('rm -rf /etc/apache2/sites-enabled/'.$_POST["delete"].'.*');
+shell_exec('rm -rf /var/www/'.$_POST["delete"]);
 }
 }
-function button($host) {
+function button() {
 $dir = "/var/www";
 $list = array_slice(scandir($dir), 2);
 $count = 1;
