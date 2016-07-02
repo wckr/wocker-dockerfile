@@ -138,6 +138,8 @@ RUN chmod 777 /etc/hosts2
 RUN touch /etc/hosts3
 RUN chown -R wocker:wocker /etc/hosts3
 RUN chmod 777 /etc/hosts3
+RUN echo "Cmnd_Alias      RESTART_APACHE = /usr/sbin/service apache2 force-reload" >> /etc/sudoers
+RUN echo "wocker ALL=NOPASSWD: RESTART_APACHE, /usr/local/bin/vhost, /usr/local/bin/wp-install,/bin/echo,/bin/sed" >> /etc/sudoers
 
 #
 # Open ports
