@@ -131,6 +131,8 @@ RUN chown -R wocker:wocker /var/www/wordpress
 RUN chown -R wocker:wocker /var/www
 RUN chown -R wocker:wocker /etc/apache2/sites-enabled
 RUN chown -R wocker:wocker /etc/hosts
+RUN chmod 777 /etc/hosts
+
 
 #
 # Open ports
@@ -144,7 +146,7 @@ RUN mkdir -p /var/log/supervisor
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD vhost /usr/local/bin/vhost
 ADD wp-install /usr/local/bin/wp-install
-ADD interface.php /var/www/html/interface.php
+ADD interface.php /var/www/wordpress/interface.php
 RUN chmod +x /usr/local/bin/vhost
 RUN chmod +x /usr/local/bin/wp-install
 
