@@ -49,10 +49,12 @@ shell_exec($install);
 function delete() {
 if ($_POST["delete"] != '') {
 $_POST["delete"];
-$sed = 'sed -i -e \''.'s/127.0.0.1\t'.$_POST["delete"].'//g\''.' /etc/hosts'; 
-$sed2 = 'sed -i -e \''.'/^$/d\''. ' /etc/hosts';
+$sed = 'sed -e \''.'s/127.0.0.1\t'.$_POST["delete"].'//g\''.' /etc/hosts > /etc/hosts2';
+$sed2 = 'sed -e \''.'/^$/d\''. ' /etc/hosts > /etc/hosts3';
 shell_exec($sed);
+shell_exec('cp -f /etc/hosts2 /etc/hosts');
 shell_exec($sed2);
+shell_exec('cp -f /etc/hosts3 /etc/hosts');
 shell_exec('rm -rf /etc/apache2/sites-enabled/'.$_POST["delete"].'.*');
 shell_exec('rm -rf /var/www/'.$_POST["delete"]);
 }
