@@ -142,6 +142,7 @@ RUN mkdir -p /var/log/supervisor
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD vhost /usr/local/bin/vhost
 ADD wp-install /usr/local/bin/wp-install
+ADD interface.php /var/www/html/interface.php
 RUN chmod +x /usr/local/bin/vhost
 RUN chmod +x /usr/local/bin/wp-install
 
