@@ -73,5 +73,5 @@
 
     echo -e "=== hosts file updated"
     echo -e "=== Restarting Apache server ... \n"
-    apachectl graceful # ! Warning - this is OS X specific
+    sudo service apache2 force-reload # ! Warning - this is OS X specific
     echo -e "=== Virtual Host & Server configuration - Finished successfully \n"
