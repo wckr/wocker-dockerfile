@@ -132,7 +132,10 @@ RUN chown -R wocker:wocker /var/www
 RUN chown -R wocker:wocker /etc/apache2/sites-enabled
 RUN chown -R wocker:wocker /etc/hosts
 RUN chmod 777 /etc/hosts
-
+RUN touch /etc/hosts2
+RUN chmod 777 /etc/hosts2
+RUN touch /etc/hosts3
+RUN chmod 777 /etc/hosts3
 
 #
 # Open ports
