@@ -54,6 +54,22 @@ RUN echo "zend_extension="/usr/lib/php5/20131226/xdebug.so"" >> /etc/php5/apache
 RUN gem install mailcatcher
 
 #
+#Install Mailcatcher dependencies
+#
+RUN gem install coffee-script
+RUN gem install compass
+RUN gem install minitest
+RUN gem install rake
+RUN gem install rdoc
+RUN gem install sass
+RUN gem install selenium-webdriver
+RUN gem install sprockets
+RUN gem install sprockets-helpers
+RUN gem install sprockets-sass
+RUN gem install uglifier
+
+
+#
 # Setup MailCatcher Apache proxy-pass
 #
 RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/mailcatcher http:\/\/127.0.0.1:1080\/ \n' /etc/apache2/sites-enabled/000-default.conf
