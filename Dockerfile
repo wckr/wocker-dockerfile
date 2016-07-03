@@ -68,6 +68,7 @@ RUN sed -i -e 's/file) cmd="$cmd >> "`shell_quote_string "$err_log"`" 2>\&1" ;;/
 
 #
 # Apache Settings
+# Enable required modules for rewrite, vhosts, and proxy (proxy required for mailcatcher)
 #
 RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
@@ -84,6 +85,7 @@ RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
 
 #
 # php.ini settings
+# Change sendmail path to allow the usage of mailcatcher 
 #
 RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 256M/" /etc/php5/apache2/php.ini \
     && sed -i -e "s/^post_max_size.*/post_max_size = 267M/" /etc/php5/apache2/php.ini \
@@ -127,6 +129,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
       --title=WordPress \
     && wp theme update --allow-root --all \
     && wp plugin update --allow-root --all
+#Own directories and change permissions - this helps for the automatic scripts for Vhost creation
 RUN chown -R wocker:wocker /var/www/wordpress
 RUN chown -R wocker:wocker /var/www
 RUN chown -R wocker:wocker /etc/apache2/sites-enabled
@@ -138,6 +141,7 @@ RUN chmod 777 /etc/hosts2
 RUN touch /etc/hosts3
 RUN chown -R wocker:wocker /etc/hosts3
 RUN chmod 777 /etc/hosts3
+#Add allowed command to the user Wocker, so that he can reload apache configuration without password via sudo
 RUN echo "Cmnd_Alias      RESTART_APACHE = /usr/sbin/service apache2 force-reload" >> /etc/sudoers
 RUN echo "wocker ALL=NOPASSWD: RESTART_APACHE, /usr/local/bin/vhost, /usr/local/bin/wp-install,/bin/echo,/bin/sed" >> /etc/sudoers
 
@@ -153,10 +157,12 @@ RUN mkdir -p /var/log/supervisor
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD vhost /usr/local/bin/vhost
 ADD wp-install /usr/local/bin/wp-install
+#Add Web interface and backend for adding WordPress installs + Vhosts
 ADD interface.php /var/www/wordpress/interface.php
 RUN chmod +x /usr/local/bin/vhost
 RUN chmod +x /usr/local/bin/wp-install
 
+#Install composer - everybody needs that
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && chmod +x /usr/local/bin/composer
