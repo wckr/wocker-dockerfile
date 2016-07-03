@@ -1,5 +1,6 @@
 #!/bin/bash
     export HOSTS_FILE='/etc/hosts'
+    export HOSTS_FILE2='/etc/hosts2'
 
     export APACHE_VHOSTS_ROOT_DIR='/var/www/'
     export APACHE_VHOSTS_CONF_DIR='/etc/apache2/sites-enabled/'
@@ -69,7 +70,8 @@
     echo -e "=== VHost file created"
 
     # Add the site to the local hosts file
-    sh -c "echo '127.0.0.1	'$1 >> $HOSTS_FILE"
+    sh -c "echo '127.0.0.1	'$1 >> $HOSTS_FILE2"
+    sh -c "sudo cp -f $HOSTS_FILE2 $HOSTS_FILE"
 
     echo -e "=== hosts file updated"
     echo -e "=== Restarting Apache server ... \n"
