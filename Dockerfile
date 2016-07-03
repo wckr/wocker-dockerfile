@@ -159,7 +159,8 @@ RUN chown -R wocker:wocker /etc/hosts3
 RUN chmod 777 /etc/hosts3
 #Add allowed command to the user Wocker, so that he can reload apache configuration without password via sudo
 RUN echo "Cmnd_Alias      RESTART_APACHE = /usr/sbin/service apache2 force-reload" >> /etc/sudoers
-RUN echo "wocker ALL=NOPASSWD: RESTART_APACHE, /usr/local/bin/vhost, /usr/local/bin/wp-install,/bin/echo,/bin/sed" >> /etc/sudoers
+RUN echo "Cmnd_Alias      UPDATE_HOSTS = /bin/cp -f /etc/hosts2 /etc/hosts"  >> /etc/sudoers
+RUN echo "wocker ALL=NOPASSWD: RESTART_APACHE, UPDATE_HOSTS, /usr/local/bin/vhost, /usr/local/bin/wp-install, /bin/echo, /bin/sed" >> /etc/sudoers
 
 #
 # Open ports
