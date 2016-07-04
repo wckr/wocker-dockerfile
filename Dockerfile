@@ -73,10 +73,10 @@ RUN gem install uglifier
 
 #
 # Setup MailCatcher Apache proxy-pass
-#
-RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/mailcatcher http:\/\/127.0.0.1:1080\/ \n' /etc/apache2/sites-enabled/000-default.conf
-RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/assets\/mailcatcher.css http:\/\/127.0.0.1:1080\/assets\/mailcatcher.css \n' /etc/apache2/sites-enabled/000-default.conf
-RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/assets\/mailcatcher.js http:\/\/127.0.0.1:1080\/assets\/mailcatcher.js \n' /etc/apache2/sites-enabled/000-default.conf
+# This should be obsolete now - keeping it for the record only.
+#RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/mailcatcher http:\/\/127.0.0.1:1080\/ \n' /etc/apache2/sites-enabled/000-default.conf
+#RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/assets\/mailcatcher.css http:\/\/127.0.0.1:1080\/assets\/mailcatcher.css \n' /etc/apache2/sites-enabled/000-default.conf
+#RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/assets\/mailcatcher.js http:\/\/127.0.0.1:1080\/assets\/mailcatcher.js \n' /etc/apache2/sites-enabled/000-default.conf
 
 #
 # `mysqld_safe` patch
@@ -96,10 +96,10 @@ RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
     && sed -i -e "s/export APACHE_RUN_GROUP=.*/export APACHE_RUN_GROUP=wocker/" /etc/apache2/envvars \
     && a2enmod rewrite \
     && a2enmod vhost_alias \
-    && a2enmod ssl \
-    && a2enmod proxy \
-    && a2enmod proxy_http
-    
+    && a2enmod ssl
+#    && a2enmod proxy \
+#    && a2enmod proxy_http
+#   obsolete and not needed modules - see mailcatcher above.    
 
 #
 # php.ini settings
@@ -150,7 +150,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     && wp plugin update --allow-root --all \
     && wp menu create "Navigation" --allow-root \
     && wp menu item add-custom navigation "Management Interface" "http://debugger.dev/interface.php" --allow-root \
-    && wp menu item add-custom navigation "MailCatcher" "http://debugger.dev/mailcatcher/" --allow-root \
+    && wp menu item add-custom navigation "MailCatcher" "http://debugger.dev:1080" --allow-root \
     && wp menu item add-custom navigation "PhpMyAdmin" "http://debugger.dev/phpmyadmin/" --allow-root \
     && wp menu item add-custom navigation "WebGrind" "http://debugger.dev/webgrind/" --allow-root \
     && wp menu location assign Navigation primary --allow-root
