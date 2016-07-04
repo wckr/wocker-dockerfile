@@ -59,7 +59,7 @@ shell_exec('sudo cp -f /etc/hosts2 /etc/hosts');
 shell_exec('rm -rf /etc/apache2/sites-enabled/'.$_POST["delete"].'.*');
 shell_exec('rm -rf /var/www/'.$_POST["delete"]);
 shell_exec('sudo service apache2 force-reload');
-shell_exec('mysqladmin -uroot -proot drop '.$_POST["delete"])
+shell_exec('mysqladmin -uroot -proot drop '.$_POST["delete"]);
 }
 }
 function button() {
