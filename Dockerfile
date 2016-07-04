@@ -152,6 +152,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     && wp menu item add-custom navigation "Management Interface" "http://debugger.dev/interface.php" --allow-root \
     && wp menu item add-custom navigation "MailCatcher" "http://debugger.dev/mailcatcher/" --allow-root \
     && wp menu item add-custom navigation "PhpMyAdmin" "http://debugger.dev/phpmyadmin/" --allow-root \
+    && wp menu item add-custom navigation "WebGrind" "http://debugger.dev/webgrind/" --allow-root \
     && wp menu location assign Navigation primary --allow-root
     
     
