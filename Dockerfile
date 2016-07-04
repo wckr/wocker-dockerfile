@@ -172,12 +172,14 @@ EXPOSE 80 443 3306 1080 9000
 #
 RUN mkdir -p /var/log/supervisor
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD restore_hosts /usr/local/bin/restore_hosts
 ADD vhost /usr/local/bin/vhost
 ADD wp-install /usr/local/bin/wp-install
 #Add Web interface and backend for adding WordPress installs + Vhosts
 ADD interface.php /var/www/wordpress/interface.php
 RUN chmod +x /usr/local/bin/vhost
 RUN chmod +x /usr/local/bin/wp-install
+RUN chmod +x /usr/local/bin/restore_hosts
 
 #Install composer - everybody needs that
 RUN curl -sS https://getcomposer.org/installer | php \
