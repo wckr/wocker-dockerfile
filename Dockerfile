@@ -160,6 +160,7 @@ RUN chown -R wocker:wocker /var/www/wordpress
 RUN chown -R wocker:wocker /var/www
 RUN chown -R wocker:wocker /etc/apache2/sites-enabled
 RUN chown -R wocker:wocker /etc/hosts
+RUN chown -R wocker:wocker /var/www/profiler
 RUN chmod 777 /etc/hosts
 RUN touch /etc/hosts2
 RUN chown -R wocker:wocker /etc/hosts2
@@ -167,6 +168,7 @@ RUN chmod 777 /etc/hosts2
 RUN touch /etc/hosts3
 RUN chown -R wocker:wocker /etc/hosts3
 RUN chmod 777 /etc/hosts3
+RUN git clone https://github.com/jokkedk/webgrind.git
 #Add allowed command to the user Wocker, so that he can reload apache configuration without password via sudo
 RUN echo "Cmnd_Alias      RESTART_APACHE = /usr/sbin/service apache2 force-reload" >> /etc/sudoers
 RUN echo "Cmnd_Alias      UPDATE_HOSTS = /bin/cp -f /etc/hosts2 /etc/hosts"  >> /etc/sudoers
