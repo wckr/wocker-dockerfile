@@ -47,7 +47,7 @@ RUN echo "zend_extension=/usr/lib/php5/20131226/xdebug.so" >> /etc/php5/apache2/
     && echo "xdebug.remote_handler = dbgp" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
     && echo "xdebug.profiler_enable=0" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
     && echo "xdebug.profiler_output_dir=/var/www/profiler" >> /etc/php5/apache2/conf.d/20-xdebug.ini \
-    && echo "xdebug.profiler_output_name = "cachegrind.out.%p""
+    && echo "xdebug.profiler_output_name = "cachegrind.out.%p"" >> /etc/php5/apache2/conf.d/20-xdebug.ini
     
 
 #
