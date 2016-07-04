@@ -1,0 +1,103 @@
+#!/bin/bash
+	export MYSQL_ROOT_USER='root'
+	export MYSQL_ROOT_PASS='root'
+	export DEFAULT_MYSQL_USER_PASS='root'
+	export DEFAULT_WORDPRESS_USER_NAME='admin'
+	export DEFAULT_WORDPRESS_USER_EMAIL='debugger@debugger.com'
+	export DEFAULT_WORDPRESS_USER_PASS='admin'
+	export APACHE_VHOSTS_ROOT_DIR='/var/www/'
+	export MYSQL_DATA_DIR='/var/lib/mysql/'
+
+MSG_INSTALL_ABORTED="Installation aborted."
+echo -e "==============================================================================="
+echo -e "=== WP Install - WordPress install for lazy developers = = = =============="
+echo -e "=============================================================================== \n"
+if [ -z "$1" ] # Is parameter #1 zero length?
+then
+echo -e "=== ERROR: Requires one argument. Site name has to be specified."
+echo -e "=== e.g: wp-install mysite \n"
+echo -e "=== ${MSG_INSTALL_ABORTED} ===================================================== \n"
+exit 1
+fi
+site_db=$1	# Name of the MySQL wordpress database
+site_db_user=$1	# Database user account
+cwd=${PWD#*/}
+hash wp &> /dev/null
+if [ $? -eq 1 ]; then
+echo >&2 "=== ERROR: wp-cli is required. Check http://wp-cli.org for more information."
+echo -e "\n=== Just execute the following command in your terminal: \n"
+echo -e " curl https://raw.github.com/wp-cli/wp-cli.github.com/master/installer.sh | bash \n"
+echo -e " (Make sure to read the instructions) \n"
+echo -e "=== ${MSG_INSTALL_ABORTED} ===================================================== \n"
+exit 1
+fi
+UP=$(pgrep mysql | wc -l);
+if [ "$UP" -ne 2 ];
+then
+echo -e "=== ERROR: MySQL not running!\n"
+echo -e "=== This script needs MySQL running in order to install and configure"
+echo -e "=== the WordPress database. \n"
+echo -e "=== ${MSG_INSTALL_ABORTED} ===================================================== \n"
+exit 1
+fi
+if [ -d $MYSQL_DATA_DIR$site_db ]
+then
+echo -e "=== ERROR: Database '$site_db' aready exists! \n"
+echo -e "=== ${MSG_INSTALL_ABORTED} ===================================================== \n"
+exit 1
+fi
+vhost $1
+echo -e "=== Installing WordPress ..."
+echo -e "=== Downloading latest WordPress and extracting files."
+cd $APACHE_VHOSTS_ROOT_DIR$1
+wp core download --allow-root | grep 'Success' > /dev/null 2>&1
+if [ $? != 0 ]
+then
+exit 1
+fi
+
+# Create DB and add privileges
+mysqladmin -u $MYSQL_ROOT_USER -p"$MYSQL_ROOT_PASS" create $site_db > /dev/null 2>&1
+
+# Create wp-config
+wp core config --allow-root --dbname=$site_db --dbuser=$MYSQL_ROOT_USER --dbpass=$DEFAULT_MYSQL_USER_PASS --extra-php <<PHP
+define( 'WP_DEBUG', true );
+define( 'WP_DEBUG_LOG', true );
+define('WP_DEBUG_DISPLAY', true);
+@ini_set('display_errors', 1);
+PHP
+
+echo -e "=== Database created successfully"
+# Go to wordpress folder and install WordPress database and the Admin account
+cd $APACHE_VHOSTS_ROOT_DIR$1
+wp core install --allow-root --url=$1 --title=$1 --admin_name=$DEFAULT_WORDPRESS_USER_NAME --admin_email=$DEFAULT_WORDPRESS_USER_EMAIL --admin_password=$DEFAULT_WORDPRESS_USER_PASS > /dev/null 2>&1
+# Set permalink structure to pretty permalinks based on post
+wp rewrite structure --allow-root '/%postname%/'
+# Uninstall not necessary plugins - Hello Dolly and Akismet
+wp plugin uninstall --allow-root hello
+wp plugin uninstall --allow-root akismet
+# Install and activate the plugin "Types - Complete Solution for Custom Fields and Types" by OnTheGoSystems
+wp plugin install --allow-root types --activate
+# Set the theme to be Twenty Fourteen - the best theme for Wordpress(in my opinion)
+wp theme activate --allow-root twentyfourteen
+# Remove the other crappy themes
+wp theme delete --allow-root twentythirteen
+wp theme delete --allow-root twentyfifteen
+echo -e "=== Custom WordPress configuration finished \n"
+# get back to the initial directory
+cd /${cwd}
+# Set the permissions and the owner for the folders - this helps resolve plugin installation issues
+chmod 755 -R $APACHE_VHOSTS_ROOT_DIR$1
+chown wocker:wocker -R $APACHE_VHOSTS_ROOT_DIR$1
+echo -e "=== DONE! WordPress installation & configuration - Finished! \n"
+#echo -e "=== Opening site in the default browser ... \n"
+#gnome-open 'http://'$1'/'
+#gnome-open 'http://'$1'/wp-admin'
+echo -e "==============================================================================="
+echo -e "=== WordPress installation and configuration finished successfully ==========="
+echo -e "==============================================================================="
+echo -e "=== Local installation - Site root - $APACHE_VHOSTS_ROOT_DIR$1"
+echo -e "=== Local installation - wp.config.php - $APACHE_VHOSTS_ROOT_DIR$1/wp-config.php"
+echo -e "=== Local installation - Address - http://$1/"
+echo -e "=== Local installation - WP-ADMIN - http://$1/wp-admin"
+echo -e "=============================================================================== \n"

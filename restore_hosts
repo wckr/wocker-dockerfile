@@ -1,0 +1,4 @@
+#!/bin/bash
+    export HOSTS_FILE='/etc/hosts'
+    export HOSTS_FILE2='/etc/hosts2'
+    sh -c "sudo /bin/cp -f $HOSTS_FILE2 $HOSTS_FILE"
