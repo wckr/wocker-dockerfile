@@ -140,11 +140,18 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     && wp core install --allow-root \
       --admin_name=admin \
       --admin_password=admin \
-      --admin_email=admin@example.com \
+      --admin_email=admin@debugger.dev \
       --url=http://debugger.dev \
       --title=WordPress \
     && wp theme update --allow-root --all \
-    && wp plugin update --allow-root --all
+    && wp plugin update --allow-root --all \
+    && wp menu create "Navigation" --allow-root \
+    && wp menu item add-custom navigation "Management Interface" "http://debugger.dev/interface.php" --allow-root \
+    && wp menu item add-custom navigation "MailCatcher" "http://debugger.dev/mailcatcher/" --allow-root \
+    && wp menu item add-custom navigation "PhpMyAdmin" "http://debugger.dev/phpmyadmin/" --allow-root \
+    && wp menu location assign Navigation primary --allow-root
+    
+    
 #Own directories and change permissions - this helps for the automatic scripts for Vhost creation
 RUN chown -R wocker:wocker /var/www/wordpress
 RUN chown -R wocker:wocker /var/www
