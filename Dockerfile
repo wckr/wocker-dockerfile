@@ -2,7 +2,6 @@ FROM debian:jessie
 MAINTAINER ixkaito <ixkaito@gmail.com>
 
 RUN apt-get update \
-    && apt-get upgrade -y \
     && apt-get clean \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       apache2 \
