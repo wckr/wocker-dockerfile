@@ -5,19 +5,19 @@ RUN apt-get update \
     && apt-get clean \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       apache2 \
+      ca-certificates \
+      curl \
+      less \
       libapache2-mod-php5 \
-      php5 \
-      php5-cli \
-      php5-gd \
-      php5-mysql \
-      php5-curl \
       mysql-server \
       mysql-client \
-      curl \
+      php5 \
+      php5-cli \
+      php5-curl \
+      php5-gd \
+      php5-mysql \
       supervisor \
-      ca-certificates \
       vim \
-      less \
     && rm -rf /var/lib/apt/lists/*
 
 #
