@@ -68,7 +68,15 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     --dbname=wordpress \
     --dbuser=wordpress \
     --dbpass=wordpress \
-    --dbhost=localhost
+      --dbhost=localhost \
+  && wp core install --allow-root \
+    --admin_name=admin \
+    --admin_password=admin \
+    --admin_email=admin@example.com \
+    --url=http://wocker.dev \
+    --title=WordPress \
+  && wp theme update --allow-root --all \
+  && wp plugin update --allow-root --all
 RUN chown -R wocker:wocker /var/www/wordpress
 
 #
