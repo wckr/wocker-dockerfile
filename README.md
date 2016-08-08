@@ -1,6 +1,6 @@
 # WordPress Dockerfile
 
-This is a really simple Docker image of WordPress including MySQL and [WP-CLI](http://wp-cli.org/). 
+This is a really simple Dockerfile of WordPress including MySQL and [WP-CLI](http://wp-cli.org/). 
 
 ## Usage
 
