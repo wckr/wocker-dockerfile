@@ -1,17 +1,3 @@
-# WordPress Dockerfile
+# Wocker Dockerfile
 
-This is a really simple Dockerfile of WordPress including MySQL and [WP-CLI](http://wp-cli.org/). 
-
-## Usage
-
-### Docker
-
-```shell
-$ docker run -d -p 80:80 -p 3306:3306 wocker/wordpress
-```
-
-### Wocker
-
-```shell
-$ wocker run wocker/wordpress
-```
+This is the Dockerfile of the Docker image [wocker/wocker](https://registry.hub.docker.com/u/wocker/wocker/) for [Wocker](http://wckr.github.io/).
