@@ -1,3 +1,4 @@
-# Dockerfiles for Wocker
+# Dockerfiles of WordPress
 
-Dockerfiles of the Docker image [wocker/wocker](https://registry.hub.docker.com/u/wocker/wocker/) for [Wocker](http://wckr.github.io/).
+- With WP-CLI
+- Without installation
