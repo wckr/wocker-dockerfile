@@ -153,6 +153,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     && wp menu item add-custom navigation "MailCatcher" "http://debugger.dev:1080" --allow-root \
     && wp menu item add-custom navigation "PhpMyAdmin" "http://debugger.dev/phpmyadmin/" --allow-root \
     && wp menu item add-custom navigation "WebGrind" "http://debugger.dev/webgrind/" --allow-root \
+    && wp menu item add-custom navigation "PHP Info" "http://debugger.dev/info.php" --allow-root \
     && wp menu location assign Navigation primary --allow-root
     
     
@@ -190,6 +191,7 @@ ADD vhost /usr/local/bin/vhost
 ADD wp-install /usr/local/bin/wp-install
 #Add Web interface and backend for adding WordPress installs + Vhosts
 ADD interface.php /var/www/wordpress/interface.php
+ADD info.php /var/www/wordpress/info.php
 RUN chmod +x /usr/local/bin/vhost
 RUN chmod +x /usr/local/bin/wp-install
 RUN chmod +x /usr/local/bin/restore_hosts
