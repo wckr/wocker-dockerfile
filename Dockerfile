@@ -188,11 +188,13 @@ RUN mkdir -p /var/log/supervisor
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD restore_hosts /usr/local/bin/restore_hosts
 ADD vhost /usr/local/bin/vhost
+ADD alias_vhost /usr/local/bin/vhost
 ADD wp-install /usr/local/bin/wp-install
 #Add Web interface and backend for adding WordPress installs + Vhosts
 ADD interface.php /var/www/wordpress/interface.php
 ADD info.php /var/www/wordpress/info.php
 RUN chmod +x /usr/local/bin/vhost
+RUN chmod +x /usr/local/bin/alias_vhost
 RUN chmod +x /usr/local/bin/wp-install
 RUN chmod +x /usr/local/bin/restore_hosts
 
