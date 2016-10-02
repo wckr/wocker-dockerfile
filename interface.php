@@ -72,7 +72,7 @@ shell_exec('echo y | mysqladmin -uroot -proot drop '.$_POST["delete"]);
 }
 }
 function vhost() {
-if (($_POST["vhost"] != '') && ($_POST["vhost_target"] != '')) {
+if (($_POST["vhost"] != '') || ($_POST["vhost_target"] != '')) {
 $_POST["vhost"];
 $_POST["vhost_target"];
 $alias = ('alias_vhost '. $_POST["vhost"] . ' ' . $_POST["vhost_target"] );
