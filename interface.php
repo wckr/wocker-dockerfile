@@ -78,6 +78,7 @@ $alias = ('alias_vhost '. $_POST["vhost"] . ' ' . $_POST["vhost_target"] );
 shell_exec($alias);
 }
 }
+}
 function button() {
 $dir = "/var/www";
 $list = array_slice(scandir($dir), 2);
