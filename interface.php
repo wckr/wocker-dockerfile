@@ -10,6 +10,10 @@ if ( isset( $_POST['install'] ) ) {
 if ( isset( $_POST['delete'] ) ) {
     delete();
 }
+
+if ( isset( $_POST['vhost'] ) ) {
+    delete();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
@@ -25,6 +29,11 @@ Create Vhost: <input type="text" name="name">
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"> 
 Create Vhost+WordPress Install: <input type="text" name="install">
 <input type="submit" value="install">
+</form>
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"> 
+Create A New Alias To A Vhost: <input type="text" name="vhost">
+Target Vhost: <input type="text" name="vhost_target">
+<input type="submit" value="vhost">
 </form>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"> 
 <?php button(); ?>
@@ -60,6 +69,13 @@ shell_exec('rm -rf /etc/apache2/sites-enabled/'.$_POST["delete"].'.*');
 shell_exec('rm -rf /var/www/'.$_POST["delete"]);
 shell_exec('sudo service apache2 force-reload');
 shell_exec('echo y | mysqladmin -uroot -proot drop '.$_POST["delete"]);
+}
+function vhost() {
+if (($_POST["vhost"] != '') && ($_POST["vhost_target"] != '')) {
+$_POST["vhost"];
+$_POST["vhost_target"];
+$alias = ('alias_vhost '. $_POST["vhost"] . ' ' . $_POST["vhost_target"] );
+shell_exec($alias);
 }
 }
 function button() {
