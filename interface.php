@@ -12,7 +12,7 @@ if ( isset( $_POST['delete'] ) ) {
 }
 
 if ( isset( $_POST['vhost'] ) ) {
-    delete();
+    vhost();
 }
 ?>
 <!DOCTYPE html>
