@@ -70,13 +70,13 @@ shell_exec('rm -rf /var/www/'.$_POST["delete"]);
 shell_exec('sudo service apache2 force-reload');
 shell_exec('echo y | mysqladmin -uroot -proot drop '.$_POST["delete"]);
 }
+}
 function vhost() {
 if (($_POST["vhost"] != '') && ($_POST["vhost_target"] != '')) {
 $_POST["vhost"];
 $_POST["vhost_target"];
 $alias = ('alias_vhost '. $_POST["vhost"] . ' ' . $_POST["vhost_target"] );
 shell_exec($alias);
-}
 }
 }
 function button() {
