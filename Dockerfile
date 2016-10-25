@@ -197,6 +197,7 @@ RUN chmod +x /usr/local/bin/vhost
 RUN chmod +x /usr/local/bin/alias_vhost
 RUN chmod +x /usr/local/bin/wp-install
 RUN chmod +x /usr/local/bin/restore_hosts
+RUN chmod 777 /var/lib/phpmyadmin/tmp/
 
 #Install composer - everybody needs that
 RUN curl -sS https://getcomposer.org/installer | php \
