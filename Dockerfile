@@ -53,6 +53,13 @@ RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php5/ap
 ADD xdebug.ini /etc/php5/cli/conf.d/20-xdebug.ini
 
 #
+# Install PHPUnit
+#
+RUN curl -OL https://phar.phpunit.de/phpunit.phar \
+    && chmod +x phpunit.phar \
+    && mv phpunit.phar /usr/local/bin/phpunit
+
+#
 # Install WP-CLI
 #
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli-nightly.phar \
