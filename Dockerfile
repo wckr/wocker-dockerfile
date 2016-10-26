@@ -29,7 +29,7 @@ RUN apt-get update \
 RUN sed -i -e 's/file) cmd="$cmd >> "`shell_quote_string "$err_log"`" 2>\&1" ;;/file) cmd="$cmd >> "`shell_quote_string "$err_log"`" 2>\&1 \& wait" ;;/' /usr/bin/mysqld_safe
 
 #
-# Apache Settings
+# Apache settings
 #
 RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
   && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
@@ -48,6 +48,11 @@ RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php5/ap
   && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php5/apache2/php.ini
 
 #
+# Xdebug settings
+#
+ADD xdebug.ini /etc/php5/cli/conf.d/20-xdebug.ini
+
+#
 # Install WP-CLI
 #
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli-nightly.phar \
@@ -55,7 +60,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
   && mv wp-cli-nightly.phar /usr/local/bin/wp
 
 #
-# MySQL settings & Install WordPress
+# MySQL settings & install WordPress
 #
 RUN mkdir -p /var/www/wordpress
 ADD wp-cli.yml /var/www
