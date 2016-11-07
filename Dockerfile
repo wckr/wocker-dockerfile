@@ -32,8 +32,18 @@ RUN apt-get update \
       make \
       g++ \
       php-pear \
-      
+      wget\
       && rm -rf /var/lib/apt/lists/*
+
+#
+# Add blackfire
+#
+RUN wget -O - https://packagecloud.io/gpg.key | apt-key add -
+RUN echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
+RUN apt-get update
+RUN apt-get install blackfire-agent
+RUN apt-get install blackfire-php
+
 
 #
 # Xdebug remote host setup
