@@ -139,7 +139,7 @@ RUN mkdir -p /var/www/wordpress
 RUN mkdir -p /var/www/profiler
 ADD wp-cli.yml /var/www
 WORKDIR /var/www/wordpress
-RUN RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
+RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     && service mysql start \
     && mysqladmin -u root password root \
     && mysql -uroot -proot -e \
