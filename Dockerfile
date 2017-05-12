@@ -139,8 +139,7 @@ RUN mkdir -p /var/www/wordpress
 RUN mkdir -p /var/www/profiler
 ADD wp-cli.yml /var/www
 WORKDIR /var/www/wordpress
-RUN service mysql start \
-    && mysqladmin -u root password root \
+RUN mysqladmin -u root password root \
     && mysql -uroot -proot -e \
       "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8; grant all privileges on wordpress.* to wordpress@'%' identified by 'wordpress';" \
     && wp core download --allow-root \
