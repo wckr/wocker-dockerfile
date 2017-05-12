@@ -164,7 +164,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     && wp menu item add-custom navigation "PhpMyAdmin" "http://debugger.dev/phpmyadmin/" --allow-root \
     && wp menu item add-custom navigation "WebGrind" "http://debugger.dev/webgrind/" --allow-root \
     && wp menu item add-custom navigation "PHP Info" "http://debugger.dev/info.php" --allow-root \
-    && wp menu location assign Navigation primary --allow-root
+    && wp menu location assign Navigation top --allow-root
     
     
 #Own directories and change permissions - this helps for the automatic scripts for Vhost creation
