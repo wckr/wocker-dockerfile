@@ -32,7 +32,8 @@ RUN apt-get update \
       make \
       g++ \
       php-pear \
-      wget\
+      wget \
+      graphviz \
       && rm -rf /var/lib/apt/lists/*
 
 #
