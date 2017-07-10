@@ -42,8 +42,8 @@
 	echo '		Order deny,allow'
 	echo '		Allow from all'
 	echo '	</Directory>'
-	echo 'Alias /sr 'SRPATH
-	echo '	<Directory 'SRPATH'>'
+	echo 'Alias /sr '$SRPATH
+	echo '	<Directory '$SRPATH'>'
 	echo '		Options FollowSymLinks'
 	echo '		AllowOverride All'
 	echo '		Order deny,allow'
@@ -67,8 +67,8 @@
 	echo 'SSLEngine on'
 	echo 'SSLCertificateFile '$APACHE_VHOSTS_ROOT_DIR$1/apache.crt
 	echo 'SSLCertificateKeyFile '$APACHE_VHOSTS_ROOT_DIR$1/apache.key
-	echo 'Alias /sr 'SRPATH
-	echo '	<Directory 'SRPATH'>'
+	echo 'Alias /sr '$SRPATH
+	echo '	<Directory '$SRPATH'>'
 	echo '		Options FollowSymLinks'
 	echo '		AllowOverride All'
 	echo '		Order deny,allow'
