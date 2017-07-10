@@ -85,7 +85,7 @@ $list = array_slice(scandir($dir), 2);
 $count = 1;
 echo ("<table border=1px solid>");
 foreach ($list as $host) {
-if (($host != "html")&&($host != "wordpress")&&($host != "wp-cli.yml")&&($host != "profiler")) {
+if (($host != "html")&&($host != "wordpress")&&($host != "wp-cli.yml")&&($host != "profiler")&&($host != "Search-Replace-DB")) {
 echo ("<tr>");
 echo ("<td>[". $count . "]</td><td><input type=\"submit\" name=\"delete\" value=\"$host\"></td>");
 echo ("</tr>");
