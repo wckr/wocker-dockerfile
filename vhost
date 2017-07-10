@@ -1,6 +1,7 @@
 #!/bin/bash
     export HOSTS_FILE='/etc/hosts'
     export HOSTS_FILE2='/etc/hosts2'
+    export SRPATH ='/var/www/wordpress/Search-Replace-DB'
 
     export APACHE_VHOSTS_ROOT_DIR='/var/www/'
     export APACHE_VHOSTS_CONF_DIR='/etc/apache2/sites-enabled/'
@@ -41,8 +42,8 @@
 	echo '		Order deny,allow'
 	echo '		Allow from all'
 	echo '	</Directory>'
-	echo 'Alias /sr '$APACHE_VHOSTS_ROOT_DIR'Search-Replace-DB
-	echo '	<Directory '$APACHE_VHOSTS_ROOT_DIR'Search-Replace-DB>'
+	echo 'Alias /sr 'SRPATH
+	echo '	<Directory 'SRPATH'>'
 	echo '		Options FollowSymLinks'
 	echo '		AllowOverride All'
 	echo '		Order deny,allow'
@@ -66,8 +67,8 @@
 	echo 'SSLEngine on'
 	echo 'SSLCertificateFile '$APACHE_VHOSTS_ROOT_DIR$1/apache.crt
 	echo 'SSLCertificateKeyFile '$APACHE_VHOSTS_ROOT_DIR$1/apache.key
-	echo 'Alias /sr '$APACHE_VHOSTS_ROOT_DIR'Search-Replace-DB
-	echo '	<Directory '$APACHE_VHOSTS_ROOT_DIR'Search-Replace-DB>'
+	echo 'Alias /sr 'SRPATH
+	echo '	<Directory 'SRPATH'>'
 	echo '		Options FollowSymLinks'
 	echo '		AllowOverride All'
 	echo '		Order deny,allow'
