@@ -41,6 +41,13 @@
 	echo '		Order deny,allow'
 	echo '		Allow from all'
 	echo '	</Directory>'
+	echo 'Alias /sr '$APACHE_VHOSTS_ROOT_DIR'Search-Replace-DB
+	echo '	<Directory '$APACHE_VHOSTS_ROOT_DIR'Search-Replace-DB>'
+	echo '		Options FollowSymLinks'
+	echo '		AllowOverride All'
+	echo '		Order deny,allow'
+	echo '		Allow from all'
+	echo '	</Directory>'
 	echo '</VirtualHost>'
     } > $APACHE_VHOSTS_ROOT_DIR$1.conf"
 
@@ -59,6 +66,13 @@
 	echo 'SSLEngine on'
 	echo 'SSLCertificateFile '$APACHE_VHOSTS_ROOT_DIR$1/apache.crt
 	echo 'SSLCertificateKeyFile '$APACHE_VHOSTS_ROOT_DIR$1/apache.key
+	echo 'Alias /sr '$APACHE_VHOSTS_ROOT_DIR'Search-Replace-DB
+	echo '	<Directory '$APACHE_VHOSTS_ROOT_DIR'Search-Replace-DB>'
+	echo '		Options FollowSymLinks'
+	echo '		AllowOverride All'
+	echo '		Order deny,allow'
+	echo '		Allow from all'
+	echo '	</Directory>'
 	echo '</VirtualHost>'
     } > $APACHE_VHOSTS_ROOT_DIR$1.ssl.conf"
     sh -c " openssl req -new -x509 -days 327670 -sha256 -newkey rsa:1024 -nodes -keyout apache.key -out apache.crt -subj /O=Company/OU=Department/CN='$1' "
