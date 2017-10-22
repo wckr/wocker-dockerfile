@@ -53,12 +53,12 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
   && mv wp-cli.phar /usr/local/bin/wp
 
 #
-# MySQL settings & Install WordPress
+# MariaDB settings & Install WordPress
 #
 RUN mkdir -p /var/www/wordpress
 ADD wp-cli.yml /var/www
 WORKDIR /var/www/wordpress
-RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
+RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf  \
   && service mysql start \
   && mysqladmin -u root password root \
   && mysql -uroot -proot -e \
