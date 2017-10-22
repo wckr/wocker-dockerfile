@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 MAINTAINER ixkaito <ixkaito@gmail.com>
 
 RUN apt-get update \
@@ -8,16 +8,15 @@ RUN apt-get update \
     ca-certificates \
     curl \
     less \
-    libapache2-mod-php5 \
+    libapache2-mod-php \
     mysql-server \
     mysql-client \
-    php5 \
-    php5-cli \
-    php5-curl \
-    php5-dev \
-    php5-gd \
-    php5-mysql \
-    php5-xdebug \
+    php7.0 \
+    php7.0-cli \
+    php7.0-curl \
+    php7.0-gd \
+    php7.0-mysql \
+    php7.0-xdebug \
     supervisor \
     vim \
   && rm -rf /var/lib/apt/lists/*
@@ -42,10 +41,10 @@ RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
 #
 # php.ini settings
 #
-RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php5/apache2/php.ini \
-  && sed -i -e "s/^post_max_size.*/post_max_size = 64M/" /etc/php5/apache2/php.ini \
-  && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php5/apache2/php.ini \
-  && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php5/apache2/php.ini
+RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php/7.0/apache2/php.ini \
+  && sed -i -e "s/^post_max_size.*/post_max_size = 64M/" /etc/php/7.0/apache2/php.ini \
+  && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php/7.0/apache2/php.ini \
+  && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php/7.0/apache2/php.ini
 
 #
 # Xdebug settings
@@ -62,17 +61,17 @@ RUN curl -OL https://phar.phpunit.de/phpunit.phar \
 #
 # Install WP-CLI
 #
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli-nightly.phar \
-  && chmod +x wp-cli-nightly.phar \
-  && mv wp-cli-nightly.phar /usr/local/bin/wp
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+  && chmod +x wp-cli.phar \
+  && mv wp-cli.phar /usr/local/bin/wp
 
 #
-# MySQL settings & install WordPress
+# MariaDB settings & install WordPress
 #
 RUN mkdir -p /var/www/wordpress
 ADD wp-cli.yml /var/www
 WORKDIR /var/www/wordpress
-RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
+RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf  \
   && service mysql start \
   && mysqladmin -u root password root \
   && mysql -uroot -proot -e \
