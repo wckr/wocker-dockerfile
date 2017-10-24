@@ -49,7 +49,7 @@ RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php/7.0
 #
 # Xdebug settings
 #
-ADD xdebug.ini /etc/php5/cli/conf.d/20-xdebug.ini
+ADD xdebug.ini /etc/php/7.0/cli/conf.d/20-xdebug.ini
 
 #
 # Install PHPUnit
