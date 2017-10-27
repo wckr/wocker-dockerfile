@@ -72,6 +72,8 @@ echo -e "=== Database created successfully"
 # Go to wordpress folder and install WordPress database and the Admin account
 cd $APACHE_VHOSTS_ROOT_DIR$1
 wp core install --allow-root --url=$1 --title=$1 --admin_name=$DEFAULT_WORDPRESS_USER_NAME --admin_email=$DEFAULT_WORDPRESS_USER_EMAIL --admin_password=$DEFAULT_WORDPRESS_USER_PASS > /dev/null 2>&1
+# Remove inactive plugins
+wp plugin delete $(wp plugin list --status=inactive --field=name --allow-root) --allow-root
 # Set permalink structure to pretty permalinks based on post
 wp rewrite structure --allow-root '/%postname%/'
 echo -e "=== Custom WordPress configuration finished \n"
