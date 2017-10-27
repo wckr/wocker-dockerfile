@@ -19,7 +19,17 @@ RUN apt-get update \
     php7.0-xdebug \
     supervisor \
     vim \
+  && apt-get install -y build-essential software-properties-common \
+    ruby \
+    ruby-dev \
+    libsqlite3-dev \
   && rm -rf /var/lib/apt/lists/*
+
+#
+# Install Mailcatcher
+#
+RUN gem install mailcatcher
+
 
 #
 # `mysqld_safe` patch
