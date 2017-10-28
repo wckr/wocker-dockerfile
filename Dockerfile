@@ -26,12 +26,6 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 #
-# Install Mailcatcher
-#
-RUN gem install mailcatcher
-
-
-#
 # `mysqld_safe` patch
 # @see https://github.com/wckr/wocker/pull/28#issuecomment-195945765
 #
@@ -49,12 +43,18 @@ RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
   && a2enmod rewrite
 
 #
+# Install Mailcatcher
+#
+RUN gem install mailcatcher
+
+#
 # php.ini settings
 #
 RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php/7.0/apache2/php.ini \
   && sed -i -e "s/^post_max_size.*/post_max_size = 64M/" /etc/php/7.0/apache2/php.ini \
   && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php/7.0/apache2/php.ini \
-  && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php/7.0/apache2/php.ini
+  && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php/7.0/apache2/php.ini \
+  && sed -i -e "s#^;sendmail_path.*#sendmail_path = /usr/local/bin/catchmail#" /etc/php/7.0/apache2/php.ini
 
 #
 # Xdebug settings
