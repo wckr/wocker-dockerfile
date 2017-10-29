@@ -15,8 +15,8 @@ production:
 
   database:
     name: "db-name"
-    user: "user"
-    password: "pw"
+    user: "db-user"
+    password: "password"
     host: "mysql-host"
     port: "3308" # Use just in case you have exotic server config
     mysqldump_options: "--max_allowed_packet=50MB" # Only available if using SSH
@@ -24,10 +24,8 @@ production:
   exclude:
     - ".git/"
     - ".gitignore"
-    - ".sass-cache/"
     - "bin/"
     - "tmp/*"
-    - "Gemfile*"
     - "Movefile"
     - "wp-config.php"
     - "wp-content/*.sql"
