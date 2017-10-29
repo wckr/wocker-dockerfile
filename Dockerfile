@@ -7,6 +7,7 @@ RUN apt-get update \
     apache2 \
     ca-certificates \
     curl \
+    openssh-client \
     less \
     libapache2-mod-php \
     mysql-server \
@@ -81,6 +82,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 #
 RUN mkdir -p /var/www/wordpress
 ADD wp-cli.yml /var/www
+ADD Movefile /var/www/wordpress
 WORKDIR /var/www/wordpress
 RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf  \
   && service mysql start \

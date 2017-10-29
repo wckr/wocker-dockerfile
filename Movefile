@@ -1,0 +1,37 @@
+local:
+  vhost: "http://wocker.dev"
+  wordpress_path: "/var/www/wordpress/"
+
+  database:
+    name: "wordpress"
+    user: "wordpress"
+    password: "wordpress"
+    host: "localhost"
+    charset: "utf8"
+
+production:
+  vhost: "http://sample.com"
+  wordpress_path: "/home/sample/www"
+
+  database:
+    name: "db-name"
+    user: "user"
+    password: "pw"
+    host: "mysql-host"
+    port: "3308" # Use just in case you have exotic server config
+    mysqldump_options: "--max_allowed_packet=50MB" # Only available if using SSH
+
+  exclude:
+    - ".git/"
+    - ".gitignore"
+    - ".sass-cache/"
+    - "bin/"
+    - "tmp/*"
+    - "Gemfile*"
+    - "Movefile"
+    - "wp-config.php"
+    - "wp-content/*.sql"
+
+  ssh:
+    host: ""
+    user: ""
