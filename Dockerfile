@@ -43,9 +43,10 @@ RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
   && a2enmod rewrite
 
 #
-# Install Mailcatcher
+# Install Gems
 #
 RUN gem install mailcatcher
+RUN gem install wordmove -v 2.0.0
 
 #
 # php.ini settings
