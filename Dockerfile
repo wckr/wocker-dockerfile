@@ -205,6 +205,7 @@ ADD wp-install /usr/local/bin/wp-install
 #Add Web interface and backend for adding WordPress installs + Vhosts
 ADD interface.php /var/www/wordpress/interface.php
 ADD info.php /var/www/wordpress/info.php
+ADD placeholder.png /var/www/wordpress/placeholder.png
 RUN chmod +x /usr/local/bin/vhost
 RUN chmod +x /usr/local/bin/alias_vhost
 RUN chmod +x /usr/local/bin/wp-install
