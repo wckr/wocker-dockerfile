@@ -47,6 +47,9 @@
 
     sh -c "{ # Create the VHost file
 	echo '<VirtualHost *:80>'
+	echo '	RewriteEngine on'
+	echo '	RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f'
+	echo '	RewriteRule \.(gif|jpe?g|png|bmp) /var/www/wordpress/placeholder.png [NC,L]'
 	echo '	DocumentRoot '$APACHE_VHOSTS_ROOT_DIR$2
 	echo '	CustomLog '$APACHE_VHOSTS_ROOT_DIR$1/access.log combined
 	echo '	ErrorLog '$APACHE_VHOSTS_ROOT_DIR$1/error.log
@@ -62,6 +65,9 @@
 
     sh -c "{ # Create the VHost file
 	echo '<VirtualHost *:443>'
+	echo '	RewriteEngine on'
+	echo '	RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f'
+	echo '	RewriteRule \.(gif|jpe?g|png|bmp) /var/www/wordpress/placeholder.png [NC,L]'
 	echo '	DocumentRoot '$APACHE_VHOSTS_ROOT_DIR$2
 	echo '	ServerName '$1
 	echo '	CustomLog '$APACHE_VHOSTS_ROOT_DIR$1/access.ssl.log combined
