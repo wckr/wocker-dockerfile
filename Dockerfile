@@ -1,31 +1,49 @@
-FROM debian:stretch
+FROM ruby:2.4.3-slim-stretch as compiled-ruby
+FROM debian:stretch-slim
+
 MAINTAINER ixkaito <ixkaito@gmail.com>
 
 RUN apt-get update \
   && apt-get clean \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    apache2 \
-    build-essential \
     ca-certificates \
     curl \
     less \
-    libapache2-mod-php \
-    libsqlite3-dev \
+    levee \
+    libyaml-0-2 \
     mysql-server \
     mysql-client \
+    nginx \
     openssh-client \
     php7.0 \
     php7.0-cli \
     php7.0-curl \
+    php7.0-fpm \
     php7.0-gd \
     php7.0-mysql \
     php7.0-xdebug \
-    ruby \
-    ruby-dev \
-    software-properties-common \
     supervisor \
-    vim \
   && rm -rf /var/lib/apt/lists/*
+
+#
+# Copy Ruby and Gem binary
+#
+WORKDIR /usr/local/bin/
+COPY --from=compiled-ruby /usr/local/lib/ /usr/local/lib/
+COPY --from=compiled-ruby /usr/local/bin/ruby ruby
+COPY --from=compiled-ruby /usr/local/bin/gem gem
+
+#
+# Install Gems
+#
+RUN gem install wordmove
+
+#
+# Install Mailhog
+#
+WORKDIR /usr/local/bin
+RUN curl -o mailhog -L https://github.com/mailhog/MailHog/releases/download/v1.0.0/MailHog_linux_amd64 \
+  && chmod +x mailhog
 
 #
 # `mysqld_safe` patch
@@ -34,30 +52,35 @@ RUN apt-get update \
 RUN sed -i -e 's/file) cmd="$cmd >> "`shell_quote_string "$err_log"`" 2>\&1" ;;/file) cmd="$cmd >> "`shell_quote_string "$err_log"`" 2>\&1 \& wait" ;;/' /usr/bin/mysqld_safe
 
 #
-# Apache settings
+# nginx settings
 #
-RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
-  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
-  && sed -i -e '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf \
-  && sed -i -e "s#DocumentRoot.*#DocumentRoot /var/www/wordpress#" /etc/apache2/sites-available/000-default.conf \
-  && sed -i -e "s/export APACHE_RUN_USER=.*/export APACHE_RUN_USER=wocker/" /etc/apache2/envvars \
-  && sed -i -e "s/export APACHE_RUN_GROUP=.*/export APACHE_RUN_GROUP=wocker/" /etc/apache2/envvars \
-  && a2enmod rewrite
+RUN adduser --uid 1000 --gecos '' --disabled-password wocker
+WORKDIR /etc/nginx/
+RUN sed -i -e "s#root /var/www/html;#root /var/www/wordpress/;#" sites-available/default \
+  && sed -i -e "s/index index.html/index index.php index.html/" sites-available/default \
+  && sed -i -e "/location.*php/,/}/ s/#//" sites-available/default \
+  && sed -i -e "/# With php-cgi.*/,/}/ s/fastcgi.*//" sites-available/default \
+  && sed -i -e "s/server_name _;/server_name localhost;/" sites-available/default \
+  && sed -i -e "s/user www-data/user wocker/" nginx.conf
 
 #
-# Install Gems
+# php-fpm settings
 #
-RUN gem install mailcatcher
-RUN gem install wordmove -v 2.0.0
+WORKDIR /etc/php/7.0/fpm/pool.d/
+RUN sed -i -e "s/^user =.*/user = wocker/" www.conf \
+  && sed -i -e "s/^group = .*/group = wocker/" www.conf \
+  && sed -i -e "s/^listen.owner =.*/listen.owner = wocker/" www.conf \
+  && sed -i -e "s/^listen.group =.*/listen.group = wocker/" www.conf
 
 #
 # php.ini settings
 #
-RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php/7.0/apache2/php.ini \
-  && sed -i -e "s/^post_max_size.*/post_max_size = 64M/" /etc/php/7.0/apache2/php.ini \
-  && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php/7.0/apache2/php.ini \
-  && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php/7.0/apache2/php.ini \
-  && sed -i -e "s#^;sendmail_path.*#sendmail_path = /usr/local/bin/catchmail#" /etc/php/7.0/apache2/php.ini
+WORKDIR /etc/php/7.0/fpm/
+RUN sed -i -e "s/^post_max_size.*/post_max_size = 64M/" php.ini \
+  && sed -i -e "s/^display_errors.*/display_errors = On/" php.ini \
+  && sed -i -e "s#^;sendmail_path.*#sendmail_path = /usr/local/bin/mailhog sendmail#" php.ini \
+  && sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" php.ini
+RUN service php7.0-fpm start
 
 #
 # Xdebug settings
@@ -83,9 +106,8 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 #
 RUN mkdir -p /var/www/wordpress
 ADD wp-cli.yml /var/www
-ADD Movefile /var/www/wordpress
 WORKDIR /var/www/wordpress
-RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf  \
+RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf \
   && service mysql start \
   && mysqladmin -u root password root \
   && mysql -uroot -proot -e \
@@ -95,13 +117,14 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.con
     --dbname=wordpress \
     --dbuser=wordpress \
     --dbpass=wordpress \
-    --dbhost=localhost
+    --dbhost=localhost \
+  && wordmove init
 RUN chown -R wocker:wocker /var/www/wordpress
 
 #
 # Open ports
 #
-EXPOSE 80 3306
+EXPOSE 80 3306 8025
 
 #
 # Supervisor
