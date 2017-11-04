@@ -7,6 +7,7 @@ RUN apt-get update \
     apache2 \
     ca-certificates \
     curl \
+    openssh-client \
     less \
     libapache2-mod-php \
     mysql-server \
@@ -19,6 +20,10 @@ RUN apt-get update \
     php7.0-xdebug \
     supervisor \
     vim \
+  && apt-get install -y build-essential software-properties-common \
+    ruby \
+    ruby-dev \
+    libsqlite3-dev \
   && rm -rf /var/lib/apt/lists/*
 
 #
@@ -39,12 +44,19 @@ RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
   && a2enmod rewrite
 
 #
+# Install Gems
+#
+RUN gem install mailcatcher
+RUN gem install wordmove -v 2.0.0
+
+#
 # php.ini settings
 #
 RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php/7.0/apache2/php.ini \
   && sed -i -e "s/^post_max_size.*/post_max_size = 64M/" /etc/php/7.0/apache2/php.ini \
   && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php/7.0/apache2/php.ini \
-  && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php/7.0/apache2/php.ini
+  && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php/7.0/apache2/php.ini \
+  && sed -i -e "s#^;sendmail_path.*#sendmail_path = /usr/local/bin/catchmail#" /etc/php/7.0/apache2/php.ini
 
 #
 # Xdebug settings
@@ -70,6 +82,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 #
 RUN mkdir -p /var/www/wordpress
 ADD wp-cli.yml /var/www
+ADD Movefile /var/www/wordpress
 WORKDIR /var/www/wordpress
 RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf  \
   && service mysql start \
