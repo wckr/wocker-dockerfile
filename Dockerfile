@@ -5,25 +5,26 @@ RUN apt-get update \
   && apt-get clean \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     apache2 \
+    build-essential \
     ca-certificates \
     curl \
-    openssh-client \
     less \
     libapache2-mod-php \
+    libsqlite3-dev \
     mysql-server \
     mysql-client \
+    openssh-client \
     php7.0 \
     php7.0-cli \
     php7.0-curl \
     php7.0-gd \
     php7.0-mysql \
     php7.0-xdebug \
-    supervisor \
-    vim \
-  && apt-get install -y build-essential software-properties-common \
     ruby \
     ruby-dev \
-    libsqlite3-dev \
+    software-properties-common \
+    supervisor \
+    vim \
   && rm -rf /var/lib/apt/lists/*
 
 #
@@ -67,8 +68,8 @@ ADD xdebug.ini /etc/php/7.0/cli/conf.d/20-xdebug.ini
 # Install PHPUnit
 #
 RUN curl -OL https://phar.phpunit.de/phpunit.phar \
-    && chmod +x phpunit.phar \
-    && mv phpunit.phar /usr/local/bin/phpunit
+  && chmod +x phpunit.phar \
+  && mv phpunit.phar /usr/local/bin/phpunit
 
 #
 # Install WP-CLI
