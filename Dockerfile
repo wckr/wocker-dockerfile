@@ -141,7 +141,7 @@ RUN mkdir -p /var/www/profiler
 ADD wp-cli.yml /var/www
 WORKDIR /var/www/wordpress
 RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
-    && service mysql start \
+    && find /var/lib/mysql -type f -exec touch {} \; && service mysql start \
     && mysqladmin -u root password root \
     && mysql -uroot -proot -e \
       "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8; grant all privileges on wordpress.* to wordpress@'%' identified by 'wordpress';" \
