@@ -35,6 +35,7 @@ RUN apt-get update \
       wget \
       graphviz \
       && rm -rf /var/lib/apt/lists/*
+RUN find /var/lib/mysql -type f -exec touch {} \; && service mysql start
 
 #
 # Add blackfire
