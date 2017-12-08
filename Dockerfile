@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:jessie
 MAINTAINER not important
 
 RUN apt-get update \
@@ -74,7 +74,7 @@ RUN gem install coffee-script
 RUN gem install compass
 RUN gem install minitest
 RUN gem install rake
-RUN gem install rdoc
+#RUN gem install rdoc
 RUN gem install sass
 RUN gem install selenium-webdriver
 RUN gem install sprockets
