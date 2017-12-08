@@ -220,5 +220,6 @@ RUN chmod 777 /var/lib/phpmyadmin/tmp/
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && chmod +x /usr/local/bin/composer
+RUN chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
 RUN find /var/lib/mysql -type f -exec touch {} \; && service mysql start
 CMD ["/usr/bin/supervisord"]
