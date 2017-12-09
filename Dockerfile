@@ -33,8 +33,7 @@ RUN apt-get update \
       g++ \
       php-pear \
       wget \
-      graphviz \
-      && rm -rf /var/lib/apt/lists/*
+      graphviz
 
 #
 # Add blackfire
@@ -221,5 +220,5 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && chmod +x /usr/local/bin/composer
 ADD init.sh /tmp/init.sh
 RUN chmod +x /tmp/init.sh
+RUN /tmp/init.sh
 CMD ["/usr/bin/supervisord"]
-ENTRYPOINT "/tmp/init.sh"
