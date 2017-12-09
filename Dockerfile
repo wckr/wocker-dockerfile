@@ -221,5 +221,5 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && chmod +x /usr/local/bin/composer
 ADD init.sh /tmp/init.sh
 RUN chmod +x /tmp/init.sh
-ENTRYPOINT "/tmp/init.sh" && /bin/bash
 CMD ["/usr/bin/supervisord"]
+ENTRYPOINT "/tmp/init.sh"
