@@ -35,7 +35,6 @@ RUN apt-get update \
       wget \
       graphviz \
       && rm -rf /var/lib/apt/lists/*
-RUN find /var/lib/mysql -type f -exec touch {} \; && service mysql start
 
 #
 # Add blackfire
@@ -220,6 +219,7 @@ RUN chmod 777 /var/lib/phpmyadmin/tmp/
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && chmod +x /usr/local/bin/composer
-COPY init.sh /tmp/
+ADD init.sh /tmp/init.sh
+RUN chmod +x /tmp/init.sh
 ENTRYPOINT "/tmp/init.sh" && /bin/bash
 CMD ["/usr/bin/supervisord"]
