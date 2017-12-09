@@ -4,7 +4,7 @@ MAINTAINER not important
 RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get clean \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes --no-install-recommends \
       apache2 \
       libapache2-mod-php5 \
       php5 \
