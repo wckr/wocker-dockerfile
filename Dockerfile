@@ -164,7 +164,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     && wp menu create "Navigation" --allow-root \
     && wp menu item add-custom navigation "Management Interface" "http://debugger.dev/interface.php" --allow-root \
     && wp menu item add-custom navigation "MailCatcher" "http://debugger.dev:1080" --allow-root \
-    && wp menu item add-custom navigation "E-mail Log" "http://10.0.23.16/sent-mail.htm" --allow-root \
+    && wp menu item add-custom navigation "E-mail Log" "http://debugger.dev/sent-mail.htm" --allow-root \
     && wp menu item add-custom navigation "PhpMyAdmin" "http://debugger.dev/phpmyadmin/" --allow-root \
     && wp menu item add-custom navigation "WebGrind" "http://debugger.dev/webgrind/" --allow-root \
     && wp menu item add-custom navigation "PHP Info" "http://debugger.dev/info.php" --allow-root \
