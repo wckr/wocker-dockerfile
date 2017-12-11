@@ -122,7 +122,7 @@ RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 256M/" /etc/php5/a
     && sed -i -e "s/^post_max_size.*/post_max_size = 267M/" /etc/php5/apache2/php.ini \
     && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php5/apache2/php.ini \
     && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php5/apache2/php.ini \
-    && sed -i -e "s/^;sendmail_path.*/sendmail_path = \/usr\/bin\/env catchmail/" /etc/php5/apache2/php.ini
+    && sed -i -e "s/^;sendmail_path.*/sendmail_path = \/usr\/local\/bin\/phpsendmail/" /etc/php5/apache2/php.ini
 #
 # phpmyadmin copy config to sites-enabled
 #
@@ -164,6 +164,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     && wp menu create "Navigation" --allow-root \
     && wp menu item add-custom navigation "Management Interface" "http://debugger.dev/interface.php" --allow-root \
     && wp menu item add-custom navigation "MailCatcher" "http://debugger.dev:1080" --allow-root \
+    && wp menu item add-custom navigation "E-mail Log" "http://10.0.23.16/sent-mail.htm" --allow-root \
     && wp menu item add-custom navigation "PhpMyAdmin" "http://debugger.dev/phpmyadmin/" --allow-root \
     && wp menu item add-custom navigation "WebGrind" "http://debugger.dev/webgrind/" --allow-root \
     && wp menu item add-custom navigation "PHP Info" "http://debugger.dev/info.php" --allow-root \
@@ -189,7 +190,8 @@ RUN git clone https://github.com/interconnectit/Search-Replace-DB.git
 RUN echo "Cmnd_Alias      RESTART_APACHE = /usr/sbin/service apache2 force-reload" >> /etc/sudoers
 RUN echo "Cmnd_Alias      UPDATE_HOSTS = /bin/cp -f /etc/hosts2 /etc/hosts"  >> /etc/sudoers
 RUN echo "wocker ALL=NOPASSWD: RESTART_APACHE, UPDATE_HOSTS, /usr/local/bin/alias_vhost, /usr/local/bin/vhost, /usr/local/bin/wp-install, /bin/echo, /bin/sed" >> /etc/sudoers
-
+ADD phpsendmail /usr/local/bin/phpsendmail
+RUN chmod +x /usr/local/bin/phpsendmail
 #
 # Open ports
 #
