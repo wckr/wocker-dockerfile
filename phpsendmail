@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
-    $logfile = '/var/www/sent-mail.htm';
+    $logfile = '/var/www/wordpress/sent-mail.htm';
     //* Get the email content
     $log_output = "<p>" . date('Y-m-d H:i:s') . "</p>\r\n";
     $handle = fopen('php://stdin', 'r');
