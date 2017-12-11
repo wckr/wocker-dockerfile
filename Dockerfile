@@ -87,7 +87,7 @@ RUN gem install uglifier
 #RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/mailcatcher http:\/\/127.0.0.1:1080\/ \n' /etc/apache2/sites-enabled/000-default.conf
 #RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/assets\/mailcatcher.css http:\/\/127.0.0.1:1080\/assets\/mailcatcher.css \n' /etc/apache2/sites-enabled/000-default.conf
 #RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/assets\/mailcatcher.js http:\/\/127.0.0.1:1080\/assets\/mailcatcher.js \n' /etc/apache2/sites-enabled/000-default.conf
-RUN echo "sendmail_path = /usr/bin/env $(which catchmail) -f test@local.dev" | sudo tee /etc/php5/mods-available/mailcatcher.ini
+RUN echo "sendmail_path = /usr/bin/env $(which catchmail)" | sudo tee /etc/php5/mods-available/mailcatcher.ini
 RUN sudo php5enmod mailcatcher
 RUN sudo service apache2 restart
 
