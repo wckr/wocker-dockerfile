@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
     $timestamp = date("d.m.y.g");
-    $logfile = '/var/www/wordpress/mail/mail.' . $timestapm . '.html';
+    $logfile = '/var/www/wordpress/mail/mail.' . $timestamp . '.htm';
     //* Get the email content
     $log_output = "<p>" . date('Y-m-d H:i:s') . "</p>\r\n";
     $handle = fopen('php://stdin', 'r');
