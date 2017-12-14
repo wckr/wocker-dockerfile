@@ -63,22 +63,22 @@ RUN echo "zend_extension=/usr/lib/php5/20131226/xdebug.so" >> /etc/php5/apache2/
 #
 # Install MailCatcher
 #
-RUN gem install mailcatcher
+#RUN gem install mailcatcher
 
 #
 #Install Mailcatcher dependencies
 #
-RUN gem install coffee-script
-RUN gem install compass
-RUN gem install minitest
-RUN gem install rake
+#RUN gem install coffee-script
+#RUN gem install compass
+#RUN gem install minitest
+#RUN gem install rake
 #RUN gem install rdoc
-RUN gem install sass
-RUN gem install selenium-webdriver
-RUN gem install sprockets
-RUN gem install sprockets-helpers
-RUN gem install sprockets-sass
-RUN gem install uglifier
+#RUN gem install sass
+#RUN gem install selenium-webdriver
+#RUN gem install sprockets
+#RUN gem install sprockets-helpers
+#RUN gem install sprockets-sass
+#RUN gem install uglifier
 
 
 #
@@ -87,9 +87,9 @@ RUN gem install uglifier
 #RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/mailcatcher http:\/\/127.0.0.1:1080\/ \n' /etc/apache2/sites-enabled/000-default.conf
 #RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/assets\/mailcatcher.css http:\/\/127.0.0.1:1080\/assets\/mailcatcher.css \n' /etc/apache2/sites-enabled/000-default.conf
 #RUN sed -i -e '/<\/VirtualHost>/i \ProxyPass \/assets\/mailcatcher.js http:\/\/127.0.0.1:1080\/assets\/mailcatcher.js \n' /etc/apache2/sites-enabled/000-default.conf
-RUN echo "sendmail_path = /usr/bin/env $(which catchmail)" | sudo tee /etc/php5/mods-available/mailcatcher.ini
+#RUN echo "sendmail_path = /usr/bin/env $(which catchmail)" | sudo tee /etc/php5/mods-available/mailcatcher.ini
 #RUN sudo php5enmod mailcatcher
-RUN sudo service apache2 restart
+#RUN sudo service apache2 restart
 
 #
 # `mysqld_safe` patch
@@ -122,7 +122,10 @@ RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 256M/" /etc/php5/a
     && sed -i -e "s/^post_max_size.*/post_max_size = 267M/" /etc/php5/apache2/php.ini \
     && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php5/apache2/php.ini \
     && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php5/apache2/php.ini \
-    && sed -i -e "s/^;sendmail_path.*/sendmail_path = \/usr\/local\/bin\/phpsendmail/" /etc/php5/apache2/php.ini
+    && sed -i -e "s/^;sendmail_path.*/sendmail_path = \/usr\/local\/bin\/phpsendmail/" /etc/php5/apache2/php.ini \
+    && sed -i -e "s/^max_execution_time.*/max_execution_time = 600/" /etc/php5/apache2/php.ini \
+    && sed -i -e "s/^max_input_time.*/max_input_time = 600/" /etc/php5/apache2/php.ini \
+    && sed -i -e "s/^memory_limit.*/memory_limit = 256M/" /etc/php5/apache2/php.ini
 #
 # phpmyadmin copy config to sites-enabled
 #
@@ -163,7 +166,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
     && wp plugin update --allow-root --all \
     && wp menu create "Navigation" --allow-root \
     && wp menu item add-custom navigation "Management Interface" "http://debugger.dev/interface.php" --allow-root \
-    && wp menu item add-custom navigation "MailCatcher" "http://debugger.dev:1080" --allow-root \
+    #&& wp menu item add-custom navigation "MailCatcher" "http://debugger.dev:1080" --allow-root \
     && wp menu item add-custom navigation "E-mail Log" "http://debugger.dev/sent-mail.htm" --allow-root \
     && wp menu item add-custom navigation "PhpMyAdmin" "http://debugger.dev/phpmyadmin/" --allow-root \
     && wp menu item add-custom navigation "WebGrind" "http://debugger.dev/webgrind/" --allow-root \
