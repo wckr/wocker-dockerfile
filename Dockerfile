@@ -5,7 +5,6 @@ RUN apt-get update \
   && apt-get clean \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     apache2 \
-    build-essential \
     ca-certificates \
     curl \
     less \
@@ -20,8 +19,6 @@ RUN apt-get update \
     php7.0-gd \
     php7.0-mysql \
     php7.0-xdebug \
-    ruby \
-    ruby-dev \
     software-properties-common \
     supervisor \
     vim \
@@ -43,12 +40,6 @@ RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
   && sed -i -e "s/export APACHE_RUN_USER=.*/export APACHE_RUN_USER=wocker/" /etc/apache2/envvars \
   && sed -i -e "s/export APACHE_RUN_GROUP=.*/export APACHE_RUN_GROUP=wocker/" /etc/apache2/envvars \
   && a2enmod rewrite
-
-#
-# Install Gems
-#
-RUN gem install mailcatcher
-RUN gem install wordmove -v 2.0.0
 
 #
 # php.ini settings
@@ -83,7 +74,6 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 #
 RUN mkdir -p /var/www/wordpress
 ADD wp-cli.yml /var/www
-ADD Movefile /var/www/wordpress
 WORKDIR /var/www/wordpress
 RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf  \
   && service mysql start \
@@ -100,7 +90,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.con
     --admin_name=admin \
     --admin_password=admin \
     --admin_email=admin@example.com \
-    --url=http://wocker.dev \
+    --url=http://wocker.test \
     --title=WordPress \
   && wp theme update --allow-root --all \
   && wp plugin update --allow-root --all
