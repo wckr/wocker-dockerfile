@@ -63,7 +63,7 @@ COPY --from=compiled-ruby /usr/local/bin/gem /usr/local/bin/gem
 #
 # Install Gems
 #
-RUN gem install wordmove --no-document
+RUN gem install wordmove -v 2.4.0 --no-document
 
 #
 # Install WP-CLI
@@ -104,8 +104,7 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.con
     --dbname=wordpress \
     --dbuser=wordpress \
     --dbpass=wordpress \
-    --dbhost=localhost \
-  && wordmove init
+    --dbhost=localhost
 RUN chown -R wocker:wocker /var/www/wordpress
 
 #
