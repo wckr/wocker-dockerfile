@@ -11,6 +11,7 @@ RUN apt-get update \
     curl \
     less \
     levee \
+    libapache2-mod-php \
     libyaml-0-2 \
     mysql-server \
     mysql-client \
