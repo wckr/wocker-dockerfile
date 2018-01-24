@@ -10,11 +10,11 @@ RUN apt-get update \
     ca-certificates \
     curl \
     less \
-    levee \
     libapache2-mod-php \
     libyaml-0-2 \
     mysql-server \
     mysql-client \
+    nano \
     openssh-client \
     php7.0 \
     php7.0-bz \
