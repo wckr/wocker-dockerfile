@@ -25,6 +25,7 @@ RUN apt-get update \
     php7.0-mysql \
     php7.0-xdebug \
     php7.0-xml \
+    sshpass \
     supervisor \
   && rm -rf /var/lib/apt/lists/*
 
