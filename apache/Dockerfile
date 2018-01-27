@@ -1,4 +1,4 @@
-FROM ruby:2.4.3-slim-stretch as compiled-ruby
+FROM ruby:2.5.0-slim-stretch as compiled-ruby
 FROM debian:stretch-slim
 
 MAINTAINER ixkaito <ixkaito@gmail.com>
@@ -64,7 +64,7 @@ COPY --from=compiled-ruby /usr/local/bin/gem /usr/local/bin/gem
 #
 # Install Gems
 #
-RUN gem install wordmove -v 2.4.0 --no-document
+RUN gem install wordmove --no-document
 
 #
 # Install WP-CLI
