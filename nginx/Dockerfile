@@ -2,6 +2,9 @@ FROM wocker/base
 
 MAINTAINER ixkaito <ixkaito@gmail.com>
 
+#
+# Install nginx and PHP
+#
 RUN apt-get update \
   && apt-get clean \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -59,8 +62,16 @@ RUN service mysql start \
     --dbname=wordpress \
     --dbuser=wordpress \
     --dbpass=wordpress \
-    --dbhost=localhost
-RUN chown -R wocker:wocker /var/www/wordpress
+    --dbhost=localhost \
+  && wp core install --allow-root \
+    --admin_name=admin \
+    --admin_password=admin \
+    --admin_email=admin@example.com \
+    --url=http://wocker.test \
+    --title=WordPress \
+  && wp theme update --allow-root --all \
+  && wp plugin update --allow-root --all \
+  && chown -R wocker:wocker ${DOCROOT}
 
 #
 # Open ports
