@@ -1,51 +1,35 @@
-FROM debian:stretch
+FROM wocker/base
+
 MAINTAINER ixkaito <ixkaito@gmail.com>
 
+#
+# PHP must be installed after Apache
+#
 RUN apt-get update \
   && apt-get clean \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     apache2 \
-    ca-certificates \
-    curl \
-    less \
     libapache2-mod-php \
-    mysql-server \
-    mysql-client \
     php7.0 \
+    php7.0-bz \
     php7.0-cli \
     php7.0-curl \
     php7.0-gd \
+    php7.0-mbstring \
     php7.0-mysql \
     php7.0-xdebug \
-    supervisor \
-    vim \
-  && apt-get install -y build-essential software-properties-common \
-    ruby \
-    ruby-dev \
-    libsqlite3-dev \
+    php7.0-xml \
   && rm -rf /var/lib/apt/lists/*
-
-#
-# `mysqld_safe` patch
-# @see https://github.com/wckr/wocker/pull/28#issuecomment-195945765
-#
-RUN sed -i -e 's/file) cmd="$cmd >> "`shell_quote_string "$err_log"`" 2>\&1" ;;/file) cmd="$cmd >> "`shell_quote_string "$err_log"`" 2>\&1 \& wait" ;;/' /usr/bin/mysqld_safe
 
 #
 # Apache settings
 #
-RUN adduser --uid 1000 --gecos '' --disabled-password wocker \
-  && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
   && sed -i -e '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf \
   && sed -i -e "s#DocumentRoot.*#DocumentRoot /var/www/wordpress#" /etc/apache2/sites-available/000-default.conf \
   && sed -i -e "s/export APACHE_RUN_USER=.*/export APACHE_RUN_USER=wocker/" /etc/apache2/envvars \
   && sed -i -e "s/export APACHE_RUN_GROUP=.*/export APACHE_RUN_GROUP=wocker/" /etc/apache2/envvars \
   && a2enmod rewrite
-
-#
-# Install Mailcatcher
-#
-RUN gem install mailcatcher
 
 #
 # php.ini settings
@@ -54,35 +38,13 @@ RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php/7.0
   && sed -i -e "s/^post_max_size.*/post_max_size = 64M/" /etc/php/7.0/apache2/php.ini \
   && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php/7.0/apache2/php.ini \
   && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php/7.0/apache2/php.ini \
-  && sed -i -e "s#^;sendmail_path.*#sendmail_path = /usr/local/bin/catchmail#" /etc/php/7.0/apache2/php.ini
+  && sed -i -e "s#^;sendmail_path.*#sendmail_path = /usr/local/bin/mailhog sendmail#" /etc/php/7.0/apache2/php.ini
 
 #
-# Xdebug settings
+# Install WordPress
 #
-ADD xdebug.ini /etc/php/7.0/cli/conf.d/20-xdebug.ini
-
-#
-# Install PHPUnit
-#
-RUN curl -OL https://phar.phpunit.de/phpunit.phar \
-    && chmod +x phpunit.phar \
-    && mv phpunit.phar /usr/local/bin/phpunit
-
-#
-# Install WP-CLI
-#
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-  && chmod +x wp-cli.phar \
-  && mv wp-cli.phar /usr/local/bin/wp
-
-#
-# MariaDB settings & install WordPress
-#
-RUN mkdir -p /var/www/wordpress
-ADD wp-cli.yml /var/www
-WORKDIR /var/www/wordpress
-RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf  \
-  && service mysql start \
+WORKDIR ${DOCROOT}
+RUN service mysql start \
   && mysqladmin -u root password root \
   && mysql -uroot -proot -e \
     "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8; grant all privileges on wordpress.* to wordpress@'%' identified by 'wordpress';" \
@@ -91,13 +53,13 @@ RUN sed -i -e "s/^bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.con
     --dbname=wordpress \
     --dbuser=wordpress \
     --dbpass=wordpress \
-    --dbhost=localhost
-RUN chown -R wocker:wocker /var/www/wordpress
+    --dbhost=localhost \
+  && chown -R wocker:wocker ${DOCROOT}
 
 #
 # Open ports
 #
-EXPOSE 80 3306
+EXPOSE 80 3306 8025
 
 #
 # Supervisor

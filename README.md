@@ -7,7 +7,7 @@ This is a really simple Dockerfile of WordPress including MySQL and [WP-CLI](htt
 ### Docker
 
 ```shell
-$ docker run -d -p 80:80 -p 3306:3306 wocker/wordpress
+$ docker run -d -p 80:80 -p 3306:3306 -p 8025:8025 wocker/wordpress
 ```
 
 ### Wocker
