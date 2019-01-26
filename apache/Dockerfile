@@ -49,7 +49,7 @@ RUN service mysql start \
   && mysql -uroot -proot -e \
     "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8; grant all privileges on wordpress.* to wordpress@'%' identified by 'wordpress';" \
   && wp core download --allow-root \
-  && wp core config --allow-root \
+  && wp config create --allow-root \
     --dbname=wordpress \
     --dbuser=wordpress \
     --dbpass=wordpress \
