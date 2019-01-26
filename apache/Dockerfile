@@ -53,7 +53,6 @@ RUN service mysql start \
     --dbname=wordpress \
     --dbuser=wordpress \
     --dbpass=wordpress \
-    --dbhost=localhost \
   && wp core install --allow-root \
     --admin_name=admin \
     --admin_password=admin \
