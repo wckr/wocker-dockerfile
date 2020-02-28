@@ -10,16 +10,17 @@ RUN apt-get update \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     apache2 \
     libapache2-mod-php \
-    php7.0 \
-    php7.0-bz \
-    php7.0-cli \
-    php7.0-curl \
-    php7.0-gd \
-    php7.0-mbstring \
-    php7.0-mysql \
-    php7.0-xdebug \
-    php7.0-xml \
-    php7.0-zip \
+    php-imagick \
+    php7.3 \
+    php7.3-bz \
+    php7.3-cli \
+    php7.3-curl \
+    php7.3-gd \
+    php7.3-mbstring \
+    php7.3-mysql \
+    php7.3-xdebug \
+    php7.3-xml \
+    php7.3-zip \
   && rm -rf /var/lib/apt/lists/*
 
 #
@@ -35,11 +36,11 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
 #
 # php.ini settings
 #
-RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php/7.0/apache2/php.ini \
-  && sed -i -e "s/^post_max_size.*/post_max_size = 64M/" /etc/php/7.0/apache2/php.ini \
-  && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php/7.0/apache2/php.ini \
-  && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php/7.0/apache2/php.ini \
-  && sed -i -e "s#^;sendmail_path.*#sendmail_path = /usr/local/bin/mailhog sendmail#" /etc/php/7.0/apache2/php.ini
+RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php/7.3/apache2/php.ini \
+  && sed -i -e "s/^post_max_size.*/post_max_size = 64M/" /etc/php/7.3/apache2/php.ini \
+  && sed -i -e "s/^display_errors.*/display_errors = On/" /etc/php/7.3/apache2/php.ini \
+  && sed -i -e "s/^;mbstring.internal_encoding.*/mbstring.internal_encoding = UTF-8/" /etc/php/7.3/apache2/php.ini \
+  && sed -i -e "s#^;sendmail_path.*#sendmail_path = /usr/local/bin/mailhog sendmail#" /etc/php/7.3/apache2/php.ini
 
 #
 # Install WordPress
