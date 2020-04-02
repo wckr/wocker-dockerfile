@@ -42,6 +42,11 @@ RUN sed -i -e "s/^user =.*/user = wocker/" /etc/php/7.3/fpm/pool.d/www.conf \
   && sed -i -e "s/^;listen.mode =.*/listen.mode = 0660/" /etc/php/7.3/fpm/pool.d/www.conf
 
 #
+# Xdebug settings for remote debug
+#
+ADD xdebug-remote-debug.ini /etc/php/7.3/fpm/conf.d/20-xdebug.ini
+
+#
 # php.ini settings
 #
 RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php/7.3/fpm/php.ini \
