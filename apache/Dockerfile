@@ -35,6 +35,11 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
   && a2enmod rewrite
 
 #
+# Xdebug settings for remote debug
+#
+ADD xdebug-remote-debug.ini /etc/php/7.3/apache2/conf.d/20-xdebug.ini
+
+#
 # php.ini settings
 #
 RUN sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 32M/" /etc/php/7.3/apache2/php.ini \
