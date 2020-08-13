@@ -1,6 +1,7 @@
 FROM wocker/base
 
-MAINTAINER ixkaito <ixkaito@gmail.com>
+LABEL maintainer="ixkaito <ixkaito@gmail.com>"
+LABEL version="1.5.2"
 
 #
 # Install nginx and PHP
